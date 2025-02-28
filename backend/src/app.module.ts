@@ -7,6 +7,7 @@ import { ScooterModule } from './scooter/scooter.module';
 import { VoucherModule } from './voucher/voucher.module';
 import { WalletModule } from './wallet/wallet.module';
 import { ConfigModule } from '@nestjs/config';
+import { KafkaModule } from './kafka/kafka.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { ConfigModule } from '@nestjs/config';
     ScooterModule,
     VoucherModule,
     WalletModule,
+    KafkaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

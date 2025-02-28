@@ -24,7 +24,7 @@ async function bootstrap() {
     .setTitle('E-Scooter API')
     .setDescription('University E-Scooter Rental API')
     .setVersion('1.0')
-    .addBearerAuth()
+    // .addBearerAuth() // desabilitado por enquanto
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
