@@ -27,16 +27,16 @@ export class ScooterController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.scooterService.findOne(+id);
+    return this.scooterService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateScooterDto: UpdateScooterDto) {
-    return this.scooterService.update(+id, updateScooterDto);
+    return this.scooterService.update(id, updateScooterDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.scooterService.remove(+id);
+    return this.scooterService.remove(id);
   }
 }

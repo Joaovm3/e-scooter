@@ -12,23 +12,23 @@ export class ConsumerService implements OnApplicationShutdown {
   async consume(topic: ConsumerSubscribeTopics, config: ConsumerRunConfig) {
     const consumer = this.kafkaService.getConsumer();
 
-    // try {
-    //   await consumer.connect();
-    //   await consumer.subscribe(topic);
+    try {
+      await consumer.connect();
+      await consumer.subscribe(topic);
 
-    //   console.time('consumer-run');
-    //   // TODO: verificar porquê a linha abaixo demorando tanto para startar
-    //   await consumer.run({
-    //     ...config,
-    //     autoCommit: true,
-    //     autoCommitInterval: 5000,
-    //     eachBatchAutoResolve: true,
-    //   });
-    //   console.timeEnd('consumer-run');
-    // } catch (error) {
-    //   console.error('Failed to start consumer:', error);
-    //   throw error;
-    // }
+      console.time('consumer-run');
+      // TODO: verificar porquê a linha abaixo demorando tanto para startar
+      await consumer.run({
+        ...config,
+        autoCommit: true,
+        autoCommitInterval: 5000,
+        eachBatchAutoResolve: true,
+      });
+      console.timeEnd('consumer-run');
+    } catch (error) {
+      console.error('Failed to start consumer:', error);
+      throw error;
+    }
 
     this.consumer.push(consumer);
   }

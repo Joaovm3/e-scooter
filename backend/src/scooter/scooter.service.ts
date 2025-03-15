@@ -1,26 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateScooterDto } from './dto/create-scooter.dto';
 import { UpdateScooterDto } from './dto/update-scooter.dto';
+import { Scooter } from './entities/scooter.entity';
 
 @Injectable()
 export class ScooterService {
-  create(createScooterDto: CreateScooterDto) {
-    return 'This action adds a new scooter';
+  constructor(
+    @InjectRepository(Scooter)
+    private scooterRepository: Repository<Scooter>,
+  ) {}
+
+  async create(createScooterDto: CreateScooterDto): Promise<Scooter> {
+    const scooter = this.scooterRepository.create(createScooterDto);
+    return await this.scooterRepository.save(scooter);
   }
 
-  findAll() {
-    return `This action returns all scooter`;
+  async findAll(): Promise<Scooter[]> {
+    return await this.scooterRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} scooter`;
+  async findOne(id: string): Promise<Scooter> {
+    const scooter = await this.scooterRepository.findOne({ where: { id } });
+    if (!scooter) {
+      throw new NotFoundException(`Scooter with ID ${id} not found`);
+    }
+    return scooter;
   }
 
-  update(id: number, updateScooterDto: UpdateScooterDto) {
-    return `This action updates a #${id} scooter`;
+  async update(
+    id: string,
+    updateScooterDto: UpdateScooterDto,
+  ): Promise<Scooter> {
+    const scooter = await this.findOne(id);
+    Object.assign(scooter, updateScooterDto);
+    return await this.scooterRepository.save(scooter);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} scooter`;
+  async remove(id: string): Promise<void> {
+    const result = await this.scooterRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Scooter with ID ${id} not found`);
+    }
   }
 }
