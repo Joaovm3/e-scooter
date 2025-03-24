@@ -26,7 +26,7 @@ export class AppService implements OnModuleInit {
       ],
     });
 
-    return 'topico enviado ao kafka';
+    return { success: true, message: 'topico enviado ao kafka' };
   }
 
   async onModuleInit() {

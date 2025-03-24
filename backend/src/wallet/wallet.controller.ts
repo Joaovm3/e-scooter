@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
@@ -19,7 +27,7 @@ export class WalletController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.walletService.findOne(+id);
+    return this.walletService.findOne(id);
   }
 
   @Patch(':id')
@@ -30,5 +38,19 @@ export class WalletController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.walletService.remove(+id);
+  }
+
+  @Post('add-balance')
+  // @UseGuards(JwtAuthGuard)
+  async addBalance(@Body() body: { id: string; amount: number }) {
+    const wallet = await this.walletService.addBalance(body.id, body.amount);
+    return wallet;
+  }
+
+  @Post('withdraw')
+  // @UseGuards(JwtAuthGuard)
+  async withdraw(@Body() body: { id: string; amount: number }) {
+    const wallet = await this.walletService.withdraw(body.id, body.amount);
+    return wallet;
   }
 }

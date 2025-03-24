@@ -1,9 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
+import { Wallet } from './entities/wallet.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class WalletService {
+  constructor(
+    @InjectRepository(Wallet)
+    private walletRepository: Repository<Wallet>,
+  ) {}
+
   create(createWalletDto: CreateWalletDto) {
     return 'This action adds a new wallet';
   }
@@ -12,8 +20,11 @@ export class WalletService {
     return `This action returns all wallet`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} wallet`;
+  async findOne(id: string) {
+    const wallet = await this.walletRepository.findOne({ where: { id } });
+    if (!wallet) throw new NotFoundException();
+
+    return wallet;
   }
 
   update(id: number, updateWalletDto: UpdateWalletDto) {
@@ -22,5 +33,18 @@ export class WalletService {
 
   remove(id: number) {
     return `This action removes a #${id} wallet`;
+  }
+
+  async addBalance(id: string, amount: number) {
+    const wallet = await this.findOne(id);
+    wallet.balance += amount;
+
+    const updatedWallet = await this.walletRepository.save(wallet);
+    return updatedWallet;
+  }
+
+  async withdraw(id: string, amount: number) {
+    const wallet = await this.addBalance(id, amount);
+    return wallet;
   }
 }
