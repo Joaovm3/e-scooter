@@ -1,10 +1,11 @@
 import { api } from '@/lib/api';
+import { Wallet } from '@/types/wallet';
 
 const PATH = 'wallet';
 
 export const getBalance = async (userId: string) => {
   try {
-    const response = await api.get(`${PATH}/balance`);
+    const response = await api.get<Wallet>(`${PATH}/balance`);
     return response.data;
   } catch (error) {
     console.error('Error fetching wallet balance:', error);
@@ -14,7 +15,7 @@ export const getBalance = async (userId: string) => {
 
 export const addBalance = async (amount: number) => {
   try {
-    const response = await api.post(`${PATH}/add-balance`, { amount });
+    const response = await api.post<Wallet>(`${PATH}/add-balance`, { amount });
     return response.data;
   } catch (error) {
     console.error('Error fetching add balance:', error);
@@ -24,7 +25,7 @@ export const addBalance = async (amount: number) => {
 
 export const withdraw = async () => {
   try {
-    const response = await api.get(`${PATH}/withdraw`);
+    const response = await api.get<Wallet>(`${PATH}/withdraw`);
     return response.data;
   } catch (error) {
     console.error('Error fetching withdraw', error);

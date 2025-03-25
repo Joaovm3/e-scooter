@@ -3,6 +3,7 @@ import { User, AuthContextData } from '@/types/auth';
 import {
   GoogleSignin,
   isSuccessResponse,
+  statusCodes,
 } from '@react-native-google-signin/google-signin';
 import * as SecureStore from 'expo-secure-store';
 
@@ -44,8 +45,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await SecureStore.setItemAsync(USER_KEY, JSON.stringify(userData));
       setUser(userData);
       return userData;
-    } catch (error) {
-      console.error('Erro ao salvar dados do usuário google:', error);
+    } catch (error: any) {
+      switch (error.code) {
+        case statusCodes.SIGN_IN_CANCELLED:
+          console.log('User cancelled login flow');
+          break;
+        case statusCodes.IN_PROGRESS:
+          console.log('Sign in is in progress');
+          break;
+        case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+          console.log('Play services not available');
+          break;
+        default:
+          console.error('Erro ao salvar dados do usuário google:', error);
+      }
+
       throw error;
     }
   }

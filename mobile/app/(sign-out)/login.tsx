@@ -17,49 +17,22 @@ export default function LoginScreen() {
       const user = await signIn();
       await handleBackendRequest(user);
     } catch (error: any) {
-      switch (error.code) {
-        case statusCodes.SIGN_IN_CANCELLED:
-          console.log('User cancelled login flow');
-          break;
-        case statusCodes.IN_PROGRESS:
-          console.log('Sign in is in progress');
-          break;
-        case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-          console.log('Play services not available');
-          break;
-        default:
-          console.error('Login error:', error);
-      }
+      console.error(error);
     }
   };
 
   const handleBackendRequest = async (user: User) => {
     if (!apiUrl) {
-      return console.error('Sem acesso a url da api backend');
+      throw new Error('Sem acesso a url da api backend');
     }
 
-    // const apiResponse = await fetch(`${apiUrl}/auth/google`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     email: user.email,
-    //     username: user.name,
-    //     picture: user.picture,
-    //     googleId: user.id,
-    //     token: user.token,
-    //   }),
-    // });
     const data = await findOrCreateUser(user);
-    // const data = await apiResponse.json();
-    console.log('bateu no back', { data });
-
-    if (data) {
-      router.replace('/(tabs)');
-    } else {
-      throw new Error(data.message || 'Authentication failed');
+    console.log({ back: data });
+    if (!data.user) {
+      throw new Error(data?.message || 'Authentication failed');
     }
+
+    router.replace('/(sign-in)/(home)');
   };
 
   return (
@@ -70,7 +43,7 @@ export default function LoginScreen() {
         </ThemedText>
 
         <ThemedText type="subtitle" style={styles.subtitle}>
-          Entre para começar a sua jornadas
+          Entre para começar a sua jornada
         </ThemedText>
 
         <ThemedButton

@@ -34,8 +34,8 @@ export function ThemedIconButton({
 
   const defaultIconColor = useThemeColor(
     {
-      light: '#fff', //type === 'default' ? '#000' : '#fff',
-      dark: '#fff', //type === 'default' ? '#fff' : '#000',
+      light: type === 'default' ? '#000' : '#fff',
+      dark: type === 'default' ? '#fff' : '#000',
     },
     'text',
   );
