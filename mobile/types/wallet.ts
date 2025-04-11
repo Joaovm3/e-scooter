@@ -1,4 +1,6 @@
 export interface Wallet {
   id: string;
-  balance: string;
+  userId: string;
+  balance: number;
+  // minimumBalance: number;
 }

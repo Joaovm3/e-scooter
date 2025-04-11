@@ -1,139 +1,140 @@
-import React, { useState, useEffect } from 'react';
-import MapView, {
-  Marker,
-  PROVIDER_DEFAULT,
-  PROVIDER_GOOGLE,
-  Region,
-} from 'react-native-maps';
-import { StyleSheet, View, Alert } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { StyleSheet, View, Alert, Pressable, Image } from 'react-native';
 import * as Location from 'expo-location';
 import { ThemedView } from '@/components/ThemedView';
-import { ScooterMarker } from '@/components/ScooterMarker';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedIconButton } from '@/components/ThemedIconButton';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { Platform } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
-
-const panambi = {
-  latitude: -28.308441080928095,
-  longitude: -53.51704424369822,
-};
-
-const sao_paulo = {
-  latitude: -23.5505,
-  longitude: -46.6333,
-};
-
-const INITIAL_REGION: Region = {
-  latitude: sao_paulo.latitude,
-  longitude: sao_paulo.longitude,
-  latitudeDelta: 0.005,
-  longitudeDelta: 0.005,
-};
-
-const MOCK_SCOOTERS = [
-  {
-    id: '1',
-    latitude: -28.308441080928095,
-    longitude: -53.51704424369822,
-  },
-  {
-    id: '2',
-    latitude: -28.309441080928095,
-    longitude: -53.51804424369822,
-  },
-];
+import { useAuth } from '@/contexts/AuthContext';
+import { Map } from '@/components/Map';
+import * as scooterService from '@/services/scooter.service';
+import { CreateScooter, Scooter, ScooterStatus } from '@/types/scooter';
+import { Geolocation } from '@/types/geolocation';
 
 export default function HomeScreen() {
-  const [currentRegion, setCurrentRegion] = useState(INITIAL_REGION);
+  const { user } = useAuth();
+  const [currentLocation, setCurrentLocation] = useState<Geolocation | null>(
+    null,
+  );
+  const [scooters, setScooters] = useState<Scooter[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const handleRegionChangeComplete = (region: Region) => {
-    setCurrentRegion(region);
+  useEffect(() => {
+    loadInitialData();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchScooters();
+    }, []),
+  );
+
+  const fetchScooters = async () => {
+    try {
+      const scootersData = await scooterService.getScooters();
+      setScooters(scootersData);
+      console.log('Scooters:', scootersData);
+    } catch (error) {
+      console.error('Error fetching scooters:', error);
+    }
   };
 
-  const getCurrentLocation = async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-      Alert.alert(
-        'Permission Denied',
-        'Please enable location services to use this app.',
-      );
-      return;
-    }
-
+  const loadInitialData = async () => {
     try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        Alert.alert(
+          'Permission Denied',
+          'Please enable location services to use this app.',
+        );
+        return;
+      }
+
       const location = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
       });
-      setCurrentRegion({
-        ...currentRegion,
+      setCurrentLocation({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       });
-      console.log({ location, currentRegion });
     } catch (error) {
       setErrorMsg('Error getting location');
-      console.error('Location error:', error);
+      console.error('Error loading data:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    getCurrentLocation();
-  }, []);
-
-  const handleScooterPress = (scooterId: string) => {
-    console.log(`Scooter ${scooterId} pressed`);
+  const handleScooterPress = (scooter: Scooter) => {
+    console.log('Scooter pressed:', scooter);
     // Handle scooter selection
   };
 
   const handleSettingPress = () => {
-    router.push('/profile');
+    router.push({
+      pathname: '/profile',
+      params: { headerTitle: 'Perfil' },
+    });
   };
 
   const handleScanPress = () => {
-    router.push('/scan');
+    router.push({
+      pathname: '/scan',
+    });
   };
+
+  const ProfileComponent = () => {
+    return (
+      <Pressable
+        onPress={() =>
+          router.push({
+            pathname: '/profile',
+            params: { headerTitle: 'Perfil' },
+          })
+        }
+        style={{
+          // marginLeft: 16,
+          width: 40,
+          height: 40,
+          borderRadius: 100,
+          overflow: 'hidden',
+          // backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        }}
+      >
+        <Image
+          source={{ uri: user?.picture }}
+          style={{ width: '100%', height: '100%' }}
+        />
+      </Pressable>
+    );
+  };
+
+  if (!currentLocation || isLoading) {
+    return null;
+  }
 
   return (
     <ThemedView style={styles.container}>
-      <MapView
-        provider={PROVIDER_DEFAULT}
-        style={StyleSheet.absoluteFill}
-        initialRegion={currentRegion}
-        onRegionChangeComplete={handleRegionChangeComplete} // Track user interaction
-        region={currentRegion}
-        showsUserLocation
-        showsMyLocationButton
-        followsUserLocation
-      >
-        <Marker
-          coordinate={{
-            latitude: currentRegion.latitude,
-            longitude: currentRegion.longitude,
-          }}
-        />
-
-        {MOCK_SCOOTERS.map((scooter) => (
-          <ScooterMarker
-            key={scooter.id}
-            latitude={scooter.latitude}
-            longitude={scooter.longitude}
-            onPress={() => handleScooterPress(scooter.id)}
-          />
-        ))}
-      </MapView>
+      <Map
+        location={currentLocation}
+        style={styles.homeMap}
+        markers={scooters.map((scooter) => ({
+          id: scooter.id,
+          coordinate: scooter.geolocation,
+          status: scooter.status,
+          batteryLevel: scooter.batteryLevel,
+          onPress: () => handleScooterPress(scooter),
+        }))}
+      />
 
       <ThemedView style={styles.tabBar}>
-        {/* Por hora não há nenhum componente, apenas para centralizar os demais */}
-        {/* <ThemedView style={styles.empty}></ThemedView> */}
-
         <ThemedIconButton
-          icon="settings"
-          onPress={handleSettingPress}
+          icon="compass"
+          onPress={loadInitialData}
           style={styles.actionButtons}
         />
 
@@ -144,11 +145,13 @@ export default function HomeScreen() {
           style={styles.scanButton}
         />
 
-        <ThemedIconButton
-          icon="compass"
-          onPress={getCurrentLocation}
+        {/* <ThemedIconButton
+          icon="settings"
+          onPress={handleSettingPress}
           style={styles.actionButtons}
-        />
+        /> */}
+
+        <ProfileComponent />
       </ThemedView>
     </ThemedView>
   );
@@ -158,8 +161,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  map: {
-    width: '100%',
+  homeMap: {
     height: '100%',
   },
   tabBar: {

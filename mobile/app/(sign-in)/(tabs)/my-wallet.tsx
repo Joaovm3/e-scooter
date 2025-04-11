@@ -1,60 +1,75 @@
 import { StyleSheet } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ThemedView } from '@/components/ThemedView';
-// import { Text } from '@/components/ui/Text';
-// import { Button } from '@/components/ui/Button';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import { Colors } from '@/constants/Colors';
 import * as walletService from '@/services/wallet.service';
 import { useAuth } from '@/contexts/AuthContext';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedText } from '@/components/ThemedText';
+import * as walletStorage from '@/storage/wallet.storage';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useWallet } from '@/contexts/WalletContext';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function WalletScreen() {
   const { user } = useAuth();
-  const userId = user?.id || '123';
-  const [balance, setBalance] = useState(0);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // loadBalance();
-  }, []);
+  const { balance, updateBalance, addBalance } = useWallet();
 
-  const loadBalance = async () => {
-    try {
-      setLoading(true);
-      const data = await walletService.getBalance(userId);
-      // setBalance(data.balance);
-    } catch (error) {
-      console.error('Error loading balance:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useFocusEffect(
+    useCallback(() => {
+      updateBalance();
+    }, [updateBalance]),
+  );
+
+  const router = useRouter();
+
+  // const { initialBalance } = useLocalSearchParams<{ initialBalance: string }>();
+  // const [balance, setBalance] = useState<number>(Number(initialBalance) || 0);
+
+  // useEffect(() => {
+  //   loadBalance();
+  // }, []);
+
+  // const loadBalance = async () => {
+  //   try {
+  //     const walletId = user?.walletId || '';
+  //     const data = await walletService.getWallet(walletId);
+  //     setBalance(data.balance || balance);
+  //     router.setParams({ initialBalance: balance });
+  //   } catch (error) {
+  //     console.error('Error loading balance:', error);
+  //   }
+  // };
 
   const handleAddBalance = async () => {
     try {
-      await walletService.addBalance(50);
-      await loadBalance();
+      await addBalance(2);
+      // await walletService.addBalance({
+      //   walletId: user?.walletId || '',
+      //   amount: 1,
+      // });
+      // await loadBalance();
     } catch (error) {
       console.error('Error adding balance:', error);
     }
   };
 
-  const handleWithdraw = async () => {
-    try {
-      await walletService.withdraw();
-      await loadBalance();
-    } catch (error) {
-      console.error('Error withdrawing:', error);
-    }
-  };
+  // const handleWithdraw = async () => {
+  //   try {
+  //     await walletService.withdraw();
+  //     await loadBalance();
+  //   } catch (error) {
+  //     console.error('Error withdrawing:', error);
+  //   }
+  // };
 
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={styles.balanceContainer}>
-        <ThemedText style={styles.label}>Saldo disponível</ThemedText>
-        <ThemedText style={styles.balance}>R$ {balance.toFixed(2)}</ThemedText>
+        <ThemedText type="title" style={styles.label}>
+          Saldo disponível
+        </ThemedText>
+        <ThemedText style={styles.balance}>{balance}</ThemedText>
       </ThemedView>
 
       <ThemedView style={styles.actionsContainer}>
@@ -80,19 +95,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 16,
+    // padding: 16,
+    // backgroundColor: 'red',
   },
   balanceContainer: {
     alignItems: 'center',
     marginVertical: 32,
   },
   label: {
-    marginBottom: 8,
+    marginBottom: 10,
     opacity: 0.7,
   },
   balance: {
-    fontSize: 36,
-    fontWeight: 'bold',
+    backgroundColor: 'red',
+    // fontSize: 36,
+    // fontWeight: 'bold',
   },
   actionsContainer: {
     gap: 16,

@@ -1,5 +1,12 @@
-import { Redirect, Tabs, usePathname, router, Stack } from 'expo-router';
-import React from 'react';
+import {
+  Redirect,
+  Tabs,
+  usePathname,
+  router,
+  Stack,
+  useGlobalSearchParams,
+} from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Platform,
@@ -17,19 +24,54 @@ import { useAuth } from '@/contexts/AuthContext';
 import { ThemedIconButton } from '@/components/ThemedIconButton';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedButton } from '@/components/ThemedButton';
+import { getWallet } from '@/services/wallet.service';
+import { useWallet } from '@/contexts/WalletContext';
+import { useFocusEffect } from '@react-navigation/native';
 
-export default function TabLayout() {
+export default function HomeLayout() {
   const { user, isLoading } = useAuth();
-  const colorScheme = useColorScheme();
 
   if (!user) {
     return <Redirect href="/(sign-out)/login" />;
   }
 
-  const ProfileRouter = () => {
+  const { balance, updateBalance } = useWallet();
+
+  useFocusEffect(
+    useCallback(() => {
+      updateBalance();
+    }, [updateBalance]),
+  );
+
+  // const [balance, setBalance] = useState<number>(user.wallet?.balance || 0);
+
+  // const loadBalance = async () => {
+  //   try {
+  //     const walletId = user?.walletId || '';
+  //     const data = await getWallet(walletId);
+  //     setBalance(data.balance || balance);
+  //   } catch (error) {
+  //     console.error('Error loading balance:', error);
+  //   }
+  // };
+
+  // const { initialBalance } = useGlobalSearchParams<{
+  //   initialBalance: string;
+  // }>();
+
+  // useEffect(() => {
+  //   loadBalance();
+  // }, [initialBalance]);
+
+  const SettingsRouter = () => {
     return (
       <Pressable
-        onPress={() => router.push('/profile')}
+        onPress={() =>
+          router.push({
+            pathname: '/profile',
+            params: { headerTitle: 'Perfil' },
+          })
+        }
         style={{
           marginLeft: 16,
           width: 36,
@@ -41,36 +83,46 @@ export default function TabLayout() {
       >
         <Image
           source={{ uri: user.picture }}
-          style={{
-            width: '100%',
-            height: '100%',
-          }}
+          style={{ width: '100%', height: '100%' }}
         />
       </Pressable>
     );
   };
 
-  const CouponsHeader = () => {
+  const VoucherHeader = () => {
     return (
       <ThemedIconButton
         type="default"
         icon="ticket"
-        onPress={() => router.push('/coupon')}
-        style={styles.couponButton}
+        onPress={() =>
+          router.push({
+            pathname: '/add-voucher',
+            params: { headerTitle: 'Adicionar Voucher' },
+          })
+        }
+        style={styles.voucherHeader}
       />
     );
   };
 
   const WalletBalanceHeader = () => {
-    const title = '+10';
+    const isBalancePositive = balance >= 0;
+    const title = `${isBalancePositive ? '+' : '-'} ${Math.abs(balance)}`;
 
     return (
       <ThemedButton
         title={title}
         icon="wallet"
-        // iconPosition="right"
         type="action"
-        onPress={() => router.push('/my-wallet')}
+        onPress={() =>
+          router.push({
+            pathname: '/my-wallet',
+            params: {
+              headerTitle: 'Minha Carteira',
+              initialBalance: balance,
+            },
+          })
+        }
         style={styles.walletButton}
         disabled={isLoading}
       />
@@ -84,7 +136,7 @@ export default function TabLayout() {
           headerTransparent: true,
           headerTitle: '',
           // headerLeft: ProfileRouter,
-          headerLeft: CouponsHeader,
+          headerLeft: VoucherHeader,
           // headerRight: CouponsHeader,
           headerRight: WalletBalanceHeader,
         })}
@@ -97,7 +149,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  couponButton: {
+  voucherHeader: {
     borderRadius: '50%',
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },

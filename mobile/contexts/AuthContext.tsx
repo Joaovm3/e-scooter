@@ -1,14 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { User, AuthContextData } from '@/types/auth';
+import { User, AuthContextData, GoogleUser } from '@/types/auth';
 import {
   GoogleSignin,
   isSuccessResponse,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import * as SecureStore from 'expo-secure-store';
+import { getUser, removeUser, storeUser } from '@/storage/user.storage';
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
-const USER_KEY = 'user';
 
 GoogleSignin.configure({
   iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
@@ -22,17 +21,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  async function signIn(): Promise<User> {
+  async function signIn(): Promise<GoogleUser> {
     try {
       await GoogleSignin.hasPlayServices();
       const response = await GoogleSignin.signIn();
+      console.log({ response });
+
       if (!isSuccessResponse(response)) {
         console.log('Houve um erro na mensagem de sucesso do google');
         throw new Error('Houve um erro na mensagem de sucesso do google');
       }
 
       const { user: googleUser, idToken } = response.data;
-      const userData: User = {
+      const userData: GoogleUser = {
         id: googleUser?.id,
         email: googleUser?.email,
         name: googleUser?.name || '',
@@ -42,8 +43,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         token: idToken || '',
       };
 
-      await SecureStore.setItemAsync(USER_KEY, JSON.stringify(userData));
-      setUser(userData);
       return userData;
     } catch (error: any) {
       switch (error.code) {
@@ -67,7 +66,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function signOut() {
     try {
       await GoogleSignin.signOut();
-      await SecureStore.deleteItemAsync(USER_KEY);
+      await removeUser();
       setUser(null);
     } catch (error) {
       console.error('Error signing out:', error);
@@ -77,9 +76,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function loadUser() {
     try {
-      const savedUser = await SecureStore.getItemAsync(USER_KEY);
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
+      const storagedUser = await getUser();
+      if (storagedUser) {
+        setUser(storagedUser);
       }
     } catch (error) {
       console.error('Error loading user:', error);
@@ -88,12 +87,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  async function setAndStoreUser(userData: User) {
+    setUser(userData);
+    await storeUser(userData);
+  }
+
   useEffect(() => {
     loadUser();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, isLoading, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ user, setUser, setAndStoreUser, isLoading, signIn, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

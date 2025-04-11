@@ -1,5 +1,5 @@
-import axios from 'axios';
-import * as SecureStore from 'expo-secure-store';
+import { getUser, removeUser } from '@/storage/user.storage';
+import axios, { AxiosError, isAxiosError } from 'axios';
 
 const api = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
@@ -9,9 +9,11 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(async (config) => {
-  const user = await SecureStore.getItemAsync('user');
-  if (user) {
-    const { token } = JSON.parse(user);
+  const user = await getUser();
+  console.log('interceptr', { user });
+  const token = user?.token || '';
+  if (token) {
+    // const { token } = JSON.parse(user);
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -19,12 +21,30 @@ api.interceptors.request.use(async (config) => {
 
 api.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    if (error.response?.status === 401) {
-      // Handle token expiration
-      await SecureStore.deleteItemAsync('user');
-      // You might want to trigger a logout here
+  async (error: AxiosError) => {
+    if (error.response) {
+      const { status, data } = error.response;
+
+      if (status === 401) {
+        // Handle token expiration
+        await removeUser();
+        // adicionar logout aqui
+      }
+
+      const errorMessage = data?.message || 'Erro desconhecido';
+
+      console.error(`Erro da API: `, data);
+
+      return Promise.reject(new Error(errorMessage));
     }
+
+    if (error.request) {
+      console.error('Erro de conexão. Verifique sua internet.', error);
+      return Promise.reject(new Error('Erro de conexão'));
+    }
+
+    // Outros erros
+    console.error('Erro inesperado:', error.message);
     return Promise.reject(error);
   },
 );

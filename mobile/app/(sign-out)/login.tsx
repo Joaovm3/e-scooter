@@ -1,88 +1,129 @@
-import { StyleSheet } from 'react-native';
+import { Alert, StyleSheet, ImageBackground, Image } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedButton } from '@/components/ThemedButton';
 import { router } from 'expo-router';
-import { statusCodes } from '@react-native-google-signin/google-signin';
 import { useAuth } from '@/contexts/AuthContext';
-import { User } from '@/types/auth';
+import { GoogleUser } from '@/types/auth';
 import { findOrCreateUser } from '@/services/auth.service';
+import * as walletStorage from '@/storage/wallet.storage';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
-  const { signIn, isLoading } = useAuth();
+  const { signIn, setAndStoreUser, isLoading } = useAuth();
   const apiUrl = process.env.EXPO_PUBLIC_API_URL || '';
 
   const handleGoogleSignIn = async () => {
     try {
-      const user = await signIn();
-      await handleBackendRequest(user);
+      const googleUser = await signIn();
+      await handleBackendRequest(googleUser);
     } catch (error: any) {
+      Alert.alert('Houve um erro ao fazer login', error?.message || error);
       console.error(error);
     }
   };
 
-  const handleBackendRequest = async (user: User) => {
+  const handleBackendRequest = async (googleUser: GoogleUser) => {
     if (!apiUrl) {
       throw new Error('Sem acesso a url da api backend');
     }
 
-    const data = await findOrCreateUser(user);
-    console.log({ back: data });
-    if (!data.user) {
-      throw new Error(data?.message || 'Authentication failed');
+    const userResponse = await findOrCreateUser(googleUser);
+
+    if (!userResponse) {
+      throw new Error('Authentication failed');
     }
+    console.log('userResponse', userResponse);
+    setAndStoreUser(userResponse);
+    await walletStorage.setWallet(userResponse.wallet);
 
     router.replace('/(sign-in)/(home)');
   };
 
+  const backgroundImage = require('../../assets/images/background.png');
+  const iconImage = require('../../assets/images/react-logo.png');
+
   return (
-    <ThemedView style={styles.container}>
-      <ThemedView style={styles.contentContainer}>
-        <ThemedText type="title" style={styles.title}>
-          Bem vindo ao E-Scooter
-        </ThemedText>
+    <SafeAreaProvider>
+      <ThemedView style={styles.container}>
+        <ImageBackground
+          source={backgroundImage}
+          style={styles.backgroundImage}
+          resizeMode="cover"
+        >
+          <ThemedView style={styles.contentContainer}>
+            <ThemedView style={styles.header}>
+              <Image source={iconImage} style={styles.icon} />
 
-        <ThemedText type="subtitle" style={styles.subtitle}>
-          Entre para começar a sua jornada
-        </ThemedText>
+              <ThemedText type="title" style={styles.title}>
+                escooter
+              </ThemedText>
 
-        <ThemedButton
-          title="Autenticar com Google"
-          icon="logo-google"
-          type="primary"
-          onPress={handleGoogleSignIn}
-          style={styles.button}
-          disabled={isLoading}
-        />
+              <ThemedText type="subtitle" style={styles.subtitle}>
+                Entre para começar a sua jornada
+              </ThemedText>
+            </ThemedView>
+
+            <ThemedButton
+              title="Entrar com Google"
+              icon="logo-google"
+              type="primary"
+              onPress={handleGoogleSignIn}
+              style={styles.button}
+              disabled={isLoading}
+            />
+          </ThemedView>
+        </ImageBackground>
       </ThemedView>
-    </ThemedView>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // backgroundColor: 'rgba(0, 0, 0, 0.1)', // Add darker overlay
+  },
+  backgroundImage: {
+    flex: 1,
+    justifyContent: 'center',
+    // width: '100%',
+    // height: '100%',
+  },
+  header: {
     backgroundColor: 'transparent',
+    alignItems: 'center',
+    // marginVertical: 50,
+    marginBottom: 100,
+  },
+  icon: {
+    width: 44,
+    height: 44,
   },
   contentContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    // flex: 1,
+    // alignItems: 'center',
+    // gap: 16,
+    // justifyContent: 'center',
     padding: 20,
+    backgroundColor: 'transparent',
   },
   title: {
-    fontSize: 24,
+    // fontFamily: 'MuseoModerno',
+    fontSize: 48,
+    lineHeight: 48,
     marginBottom: 8,
+    // marginTop: 30,
     textAlign: 'center',
+    color: '#FFFFFF',
   },
   subtitle: {
     fontSize: 16,
-    marginBottom: 32,
     textAlign: 'center',
     opacity: 0.8,
+    color: '#FFFFFF',
   },
   button: {
-    // minWidth: 250,
     width: '100%',
   },
 });

@@ -1,5 +1,12 @@
-import { Redirect, Tabs, usePathname, router, Stack } from 'expo-router';
-import React from 'react';
+import {
+  Redirect,
+  Tabs,
+  usePathname,
+  router,
+  Stack,
+  useGlobalSearchParams,
+} from 'expo-router';
+import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
   Platform,
@@ -17,15 +24,21 @@ import { useAuth } from '@/contexts/AuthContext';
 import { ThemedIconButton } from '@/components/ThemedIconButton';
 import { ThemedView } from '@/components/ThemedView';
 
-export default function TabLayout() {
+export default function TabLayout(test: any) {
   const { user } = useAuth();
   if (!user) {
     return <Redirect href="/(sign-out)/login" />;
   }
 
+  const { headerTitle } = useGlobalSearchParams<{ headerTitle: string }>();
+  const [title, setTitle] = React.useState<string>(headerTitle || '');
+  useEffect(() => {
+    setTitle(headerTitle || '');
+  }, [headerTitle]);
+
   const pathname = usePathname();
   const colorScheme = useColorScheme();
-  const showBackButton = !['/scan'].includes(pathname);
+  const fullScreenPage = ['/scan'].includes(pathname);
 
   const PreviousRouter = () => {
     return (
@@ -40,12 +53,19 @@ export default function TabLayout() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <ThemedView
+      style={[styles.container, !fullScreenPage && styles.containerSpace]}
+    >
       <Stack
         screenOptions={({ route }) => ({
-          headerTitle: '',
-          headerTransparent: true,
-          headerLeft: showBackButton ? PreviousRouter : undefined,
+          headerTitle: title,
+          headerTitleStyle: { fontSize: 20 },
+          // headerStyle: {
+          //   backgroundColor: 'red',
+          // },
+          headerTransparent: fullScreenPage,
+          headerShadowVisible: false,
+          headerLeft: !fullScreenPage ? PreviousRouter : undefined,
         })}
       ></Stack>
     </ThemedView>
@@ -53,10 +73,13 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
+  containerSpace: {
+    // margin: 20,
+    padding: 20,
+    // backgroundColor: 'blue',
+  },
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 20,
     justifyContent: 'center',
   },
   previousButton: {

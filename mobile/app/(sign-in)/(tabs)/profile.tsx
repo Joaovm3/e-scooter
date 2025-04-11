@@ -67,7 +67,7 @@ export default function ProfileScreen() {
           icon="ticket"
           type="default"
           onPress={() => {
-            router.navigate('/coupon');
+            router.navigate('/add-voucher');
           }}
           style={styles.menuItem}
         />
@@ -78,9 +78,31 @@ export default function ProfileScreen() {
           onPress={() => {}}
           style={styles.menuItem}
         />
+        <ThemedButton
+          title="Configurações"
+          icon="settings"
+          type="default"
+          onPress={() => {
+            router.navigate('/profile');
+          }}
+          style={styles.menuItem}
+        />
+        <ThemedButton
+          title="Cadastrar patinetes"
+          icon="settings"
+          type="default"
+          onPress={() => {
+            router.navigate({
+              pathname: '/add-scooter',
+              params: {
+                headerTitle: 'Cadastrar patinetes',
+              },
+            });
+          }}
+          style={styles.menuItem}
+        />
       </ThemedView>
 
-      {/* Sign Out Button */}
       <ThemedButton
         title="Sair"
         icon="log-out-outline"
