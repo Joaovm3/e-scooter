@@ -1,3 +1,4 @@
+import { NumberTransformer } from 'src/transformers/number.transformer';
 import { User } from 'src/user/entities/user.entity';
 import {
   BeforeInsert,
@@ -8,6 +9,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+export const MINIMUM_BALANCE = -100;
+export const INITIAL_BALANCE = Math.abs(MINIMUM_BALANCE);
+
 @Entity('wallet')
 export class Wallet {
   @PrimaryGeneratedColumn('uuid')
@@ -17,13 +21,31 @@ export class Wallet {
   @JoinColumn()
   user: User;
 
-  @Column({ type: 'decimal', default: 100 })
+  @Column()
+  userId: string;
+
+  @Column({
+    type: 'decimal',
+    precision: 10, // Total number of digits
+    scale: 2, // Digits after decimal point
+    transformer: new NumberTransformer(),
+    default: INITIAL_BALANCE,
+  })
   balance: number;
+
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: new NumberTransformer(),
+    default: MINIMUM_BALANCE,
+  })
+  minimumBalance: number;
 
   @BeforeInsert()
   setInitialBalance() {
     if (!this.balance) {
-      this.balance = 100; // Define o saldo inicial automaticamente
+      this.balance = INITIAL_BALANCE;
     }
   }
 }

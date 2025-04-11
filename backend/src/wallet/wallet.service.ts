@@ -17,11 +17,21 @@ export class WalletService {
   }
 
   findAll() {
-    return `This action returns all wallet`;
+    return this.walletRepository.find();
   }
 
   async findOne(id: string) {
     const wallet = await this.walletRepository.findOne({ where: { id } });
+    if (!wallet) throw new NotFoundException();
+
+    return wallet;
+  }
+
+  async findByUserId(userId: string) {
+    const wallet = await this.walletRepository.findOne({
+      where: { id: userId },
+    });
+
     if (!wallet) throw new NotFoundException();
 
     return wallet;
@@ -40,6 +50,7 @@ export class WalletService {
     wallet.balance += amount;
 
     const updatedWallet = await this.walletRepository.save(wallet);
+    console.log({ wallet, updatedWallet });
     return updatedWallet;
   }
 

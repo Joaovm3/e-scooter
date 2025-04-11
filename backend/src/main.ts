@@ -16,6 +16,11 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      // TODO: validar porquê está dando erro remover as propriedades que são excluídas do DTO
+      // transformOptions: {
+      //   enableImplicitConversion: true,
+      //   excludeExtraneousValues: true,
+      // },
     }),
   );
 

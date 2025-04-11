@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { VoucherService } from './voucher.service';
 import { CreateVoucherDto } from './dto/create-voucher.dto';
 import { UpdateVoucherDto } from './dto/update-voucher.dto';
@@ -30,5 +38,15 @@ export class VoucherController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.voucherService.remove(+id);
+  }
+
+  @Post(':userId/use')
+  useVoucher(@Param('userId') userId: string, @Body('code') code: string) {
+    return this.voucherService.useVoucher(userId, code);
+  }
+
+  @Get(':userId/used')
+  getUsedVouchers(@Param('userId') userId: string) {
+    return this.voucherService.getUsedVouchers(userId);
   }
 }

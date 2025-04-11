@@ -30,18 +30,18 @@ export class AppService implements OnModuleInit {
   }
 
   async onModuleInit() {
-    console.log('Iniciando o consumer');
-    await this.consumerService.consume(
-      { topics: ['test-topic'] },
-      {
-        eachMessage: async ({ topic, partition, message }) => {
-          console.log({
-            topic: topic.toString(),
-            partition: partition.toString(),
-            value: message?.value?.toString(),
-          });
-        },
-      },
-    );
+    // console.log('Iniciando o consumer');
+    // await this.consumerService.consume(
+    //   { topics: ['test-topic'] },
+    //   {
+    //     eachMessage: async ({ topic, partition, message }) => {
+    //       console.log({
+    //         topic: topic.toString(),
+    //         partition: partition.toString(),
+    //         value: message?.value?.toString(),
+    //       });
+    //     },
+    //   },
+    // );
   }
 }

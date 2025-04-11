@@ -12,13 +12,22 @@ export class ScooterService {
     private scooterRepository: Repository<Scooter>,
   ) {}
 
-  async create(createScooterDto: CreateScooterDto): Promise<Scooter> {
+  create(createScooterDto: CreateScooterDto) {
     const scooter = this.scooterRepository.create(createScooterDto);
-    return await this.scooterRepository.save(scooter);
+    return this.scooterRepository.save(scooter);
   }
 
   async findAll(): Promise<Scooter[]> {
-    return await this.scooterRepository.find();
+    const scooters = await this.scooterRepository.find();
+    console.log('scooters', scooters);
+
+    if (!scooters || !scooters.length) {
+      throw new NotFoundException(
+        'Nenhuma scooter encontrada. Solicite para o administrador adicionar uma.',
+      );
+    }
+
+    return scooters;
   }
 
   async findOne(id: string): Promise<Scooter> {

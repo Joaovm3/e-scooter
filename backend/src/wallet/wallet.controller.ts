@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
+import { AddBalanceDto } from './dto/add-balance.dto';
 
 @Controller('wallet')
 export class WalletController {
@@ -40,10 +43,21 @@ export class WalletController {
     return this.walletService.remove(+id);
   }
 
-  @Post('add-balance')
+  async getBalance(@Param('userId') userId: string) {
+    return this.walletService.findByUserId(userId);
+  }
+
+  @Post(':id/add-balance')
+  @HttpCode(HttpStatus.OK)
   // @UseGuards(JwtAuthGuard)
-  async addBalance(@Body() body: { id: string; amount: number }) {
-    const wallet = await this.walletService.addBalance(body.id, body.amount);
+  async addBalance(
+    @Param('id') id: string,
+    @Body() addBalanceDto: AddBalanceDto,
+  ) {
+    const wallet = await this.walletService.addBalance(
+      id,
+      addBalanceDto.amount,
+    );
     return wallet;
   }
 

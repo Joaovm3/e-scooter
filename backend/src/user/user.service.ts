@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Wallet } from 'src/wallet/entities/wallet.entity';
+import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -21,19 +22,31 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string): Promise<UserDto> {
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['wallet'],
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    return {
+      ...user,
+      walletId: user.wallet?.id,
+    };
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    return `This action updates a #${id} user ${updateUserDto?.email}`;
   }
 
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
 
-  async findOrCreateUser(userDto: CreateUserDto) {
+  async findOrCreateUser(userDto: CreateUserDto): Promise<UserDto> {
     let user = await this.userRepository.findOne({
       where: { email: userDto.email },
       relations: ['wallet'],
@@ -47,6 +60,9 @@ export class UserService {
       await this.userRepository.save(user);
     }
 
-    return user;
+    return {
+      ...user,
+      walletId: user.wallet.id,
+    };
   }
 }

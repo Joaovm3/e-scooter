@@ -22,7 +22,7 @@ export class CreateUserDto {
     description: 'nome do usuário do google',
   })
   @IsNotEmpty()
-  username: string;
+  name: string;
 
   @ApiProperty({
     example: '',
