@@ -1,12 +1,15 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ProducerService } from './kafka/producer/producer.service';
 import { ConsumerService } from './kafka/consumer/consumer.service';
+import { ScooterService } from './scooter/scooter.service';
+import { TrackingScooter } from './scooter/dto/scooter.dto';
 
 @Injectable()
 export class AppService implements OnModuleInit {
   constructor(
     private readonly producerService: ProducerService,
     private readonly consumerService: ConsumerService,
+    private readonly scooterService: ScooterService,
   ) {}
 
   getHello(): string {
@@ -29,19 +32,31 @@ export class AppService implements OnModuleInit {
     return { success: true, message: 'topico enviado ao kafka' };
   }
 
+  async getKafkaScootersPosition() {
+    await this.consumerService.consume(
+      { topics: ['track-scooter'] },
+      {
+        eachMessage: async ({ topic, partition, message }) => {
+          try {
+            const scooterData = JSON.parse(
+              message?.value?.toString() || '',
+            ) as TrackingScooter;
+
+            if (!scooterData?.id) {
+              console.error('Scooter não possui id', scooterData);
+              return;
+            }
+
+            await this.scooterService.emitScooterPosition(scooterData);
+          } catch (error) {
+            console.error('Error processing Kafka message:', error);
+          }
+        },
+      },
+    );
+  }
+
   async onModuleInit() {
-    // console.log('Iniciando o consumer');
-    // await this.consumerService.consume(
-    //   { topics: ['test-topic'] },
-    //   {
-    //     eachMessage: async ({ topic, partition, message }) => {
-    //       console.log({
-    //         topic: topic.toString(),
-    //         partition: partition.toString(),
-    //         value: message?.value?.toString(),
-    //       });
-    //     },
-    //   },
-    // );
+    await this.getKafkaScootersPosition();
   }
 }

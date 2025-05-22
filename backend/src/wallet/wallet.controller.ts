@@ -12,7 +12,7 @@ import {
 import { WalletService } from './wallet.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
-import { AddBalanceDto } from './dto/add-balance.dto';
+import { UpdateBalanceDto } from './dto/update-balance.dto';
 
 @Controller('wallet')
 export class WalletController {
@@ -47,16 +47,16 @@ export class WalletController {
     return this.walletService.findByUserId(userId);
   }
 
-  @Post(':id/add-balance')
+  @Post(':id/update-balance')
   @HttpCode(HttpStatus.OK)
   // @UseGuards(JwtAuthGuard)
-  async addBalance(
+  async updateBalance(
     @Param('id') id: string,
-    @Body() addBalanceDto: AddBalanceDto,
+    @Body() updateBalanceDto: UpdateBalanceDto,
   ) {
-    const wallet = await this.walletService.addBalance(
+    const wallet = await this.walletService.updateBalance(
       id,
-      addBalanceDto.amount,
+      updateBalanceDto.amount,
     );
     return wallet;
   }

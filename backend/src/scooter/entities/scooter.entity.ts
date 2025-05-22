@@ -37,6 +37,16 @@ export class Scooter {
   })
   geolocation: Geolocation;
 
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    default: null,
+  })
+  userId?: string | null;
+
+  @Column({ type: 'timestamp', nullable: true, default: null })
+  startTime?: Date | null;
+
   @CreateDateColumn()
   createdAt: Date;
 

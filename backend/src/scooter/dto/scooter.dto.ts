@@ -15,3 +15,8 @@ export class ScooterDto {
   createdAt?: Date;
   updatedAt?: Date;
 }
+export interface TrackingScooter {
+  id: string;
+  geolocation: Geolocation;
+  batteryLevel: number;
+}

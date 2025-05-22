@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { Wallet } from './entities/wallet.entity';
@@ -29,7 +33,7 @@ export class WalletService {
 
   async findByUserId(userId: string) {
     const wallet = await this.walletRepository.findOne({
-      where: { id: userId },
+      where: { userId },
     });
 
     if (!wallet) throw new NotFoundException();
@@ -45,9 +49,18 @@ export class WalletService {
     return `This action removes a #${id} wallet`;
   }
 
-  async addBalance(id: string, amount: number) {
-    const wallet = await this.findOne(id);
-    wallet.balance += amount;
+  async updateBalance(walletId: string, amount: number) {
+    const wallet = await this.findOne(walletId);
+    const minimumBalance = wallet.minimumBalance;
+    const newBalance = wallet.balance + amount;
+
+    if (amount < 0 && newBalance < minimumBalance) {
+      throw new UnprocessableEntityException(
+        `Seu saldo não pode ficar abaixo de ${minimumBalance} tokens. Adicione mais saldo a carteira para continuar`,
+      );
+    }
+
+    wallet.balance = newBalance;
 
     const updatedWallet = await this.walletRepository.save(wallet);
     console.log({ wallet, updatedWallet });
@@ -55,7 +68,7 @@ export class WalletService {
   }
 
   async withdraw(id: string, amount: number) {
-    const wallet = await this.addBalance(id, amount);
+    const wallet = await this.updateBalance(id, amount);
     return wallet;
   }
 }

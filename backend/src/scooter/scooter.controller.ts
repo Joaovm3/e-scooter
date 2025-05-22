@@ -39,4 +39,20 @@ export class ScooterController {
   remove(@Param('id') id: string) {
     return this.scooterService.remove(id);
   }
+
+  @Post(':scooterId/unlock')
+  unlock(
+    @Param('scooterId') scooterId: string,
+    @Body('userId') userId: string,
+  ) {
+    return this.scooterService.unlock(scooterId, userId);
+  }
+
+  @Post(':scooterId/finish')
+  finish(
+    @Param('scooterId') scooterId: string,
+    @Body('userId') userId: string,
+  ) {
+    return this.scooterService.finish(scooterId, userId);
+  }
 }

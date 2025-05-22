@@ -78,7 +78,7 @@ export class VoucherService {
         isActive: false,
       }),
 
-      this.walletService.addBalance(user.walletId, voucher.amount),
+      this.walletService.updateBalance(user.walletId, voucher.amount),
     ]);
 
     voucher.usageCount += 1;
