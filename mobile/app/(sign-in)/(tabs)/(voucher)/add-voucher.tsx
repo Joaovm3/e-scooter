@@ -22,7 +22,7 @@ export default function VoucherScreen() {
       const voucher = await useVoucher(user?.id, { code: couponCode });
       Alert.alert(
         'Voucher cadastrado com sucesso!',
-        `Você acabou de ganhar ${voucher.amount} moedas!`,
+        `Você acabou de ganhar ${voucher.amount} moeda(s)!`,
       );
     } catch (error: any) {
       Alert.alert('Erro ao utilizar o vocher!', error?.message || '');
@@ -59,6 +59,7 @@ export default function VoucherScreen() {
       {isAdmin && (
         <ThemedButton
           icon="add"
+          type="secondary"
           title="Criar novo voucher"
           onPress={() =>
             router.push({

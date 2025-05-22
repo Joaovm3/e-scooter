@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { ThemedText } from './ThemedText';
 import { useColorScheme } from 'react-native';
+import { ThemedView } from './ThemedView';
 
 export type ThemedButtonProps = TouchableOpacityProps & {
   lightColor?: string;
@@ -18,6 +19,7 @@ export type ThemedButtonProps = TouchableOpacityProps & {
   iconColor?: string;
   title: string;
   iconPosition?: 'left' | 'right';
+  CustomIcon?: () => JSX.Element;
 };
 
 export function ThemedButton({
@@ -30,6 +32,7 @@ export function ThemedButton({
   iconColor,
   title,
   iconPosition = 'left',
+  CustomIcon,
   ...rest
 }: ThemedButtonProps) {
   const colorScheme = useColorScheme();
@@ -38,15 +41,21 @@ export function ThemedButton({
     'background',
   );
 
+  const defaultTypes = ['default', 'secondary'];
   const defaultTextColor = useThemeColor(
     {
-      light: type === 'default' ? '#000' : '#fff', //'#fff'
-      dark: type === 'default' ? '#fff' : '#000', //'#fff'
+      light: defaultTypes.includes(type) ? '#000' : '#fff', //'#fff'
+      dark: defaultTypes.includes(type) ? '#fff' : '#000', //'#fff'
     },
     'text',
   );
 
   const color = iconColor || defaultTextColor;
+  const Icon = CustomIcon ? (
+    <CustomIcon />
+  ) : (
+    <Ionicons name={icon} size={size} color={iconColor} />
+  );
 
   return (
     <TouchableOpacity
@@ -60,23 +69,15 @@ export function ThemedButton({
         ]}
       >
         {icon && iconPosition === 'left' && (
-          <Ionicons
-            name={icon}
-            size={size}
-            color={color}
-            style={styles.leftIcon}
-          />
+          <ThemedView style={styles.leftIcon}>{Icon}</ThemedView>
         )}
+
         <ThemedText style={[styles.text, { color }]} type="defaultSemiBold">
           {title}
         </ThemedText>
+
         {icon && iconPosition === 'right' && (
-          <Ionicons
-            name={icon}
-            size={size}
-            color={color}
-            style={styles.rightIcon}
-          />
+          <ThemedView style={styles.rightIcon}>{Icon}</ThemedView>
         )}
       </View>
     </TouchableOpacity>
@@ -103,9 +104,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   leftIcon: {
+    backgroundColor: 'transparent',
     marginRight: 8,
   },
   rightIcon: {
+    backgroundColor: 'transparent',
     marginLeft: 8,
   },
   default: {
@@ -116,11 +119,12 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   primary: {
-    backgroundColor: '#0a7ea4',
-    borderRadius: 12,
+    backgroundColor: '#1294E2',
+    borderRadius: 8,
   },
   secondary: {
-    backgroundColor: '#4285F4',
-    borderRadius: 12,
+    // backgroundColor: '#4285F4',
+    backgroundColor: '#f1f1f1',
+    borderRadius: 8,
   },
 });

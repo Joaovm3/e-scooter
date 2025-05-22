@@ -69,37 +69,38 @@ export default function CreateVoucherScreen() {
 
       <ThemedView style={styles.inputContainer}>
         <Input
+          title="Código do voucher"
           value={code}
           onChangeText={handleCodeChange}
-          placeholder="Código do voucher (apenas letras e números)"
+          placeholder="Apenas letras e números"
           autoCapitalize="characters"
           maxLength={15}
           style={[styles.input, styles.uppercase]}
         />
         <Input
+          title="Valor do voucher"
           value={amount}
           onChangeText={setAmount}
-          placeholder="Valor do voucher"
+          placeholder="ex: 10"
           keyboardType="numeric"
           style={styles.input}
         />
         <Input
+          title="Limite de uso (opcional)"
           value={usageLimit}
           onChangeText={setUsageLimit}
-          placeholder="Limite de uso"
+          placeholder="Quantidade de utilizações"
           keyboardType="numeric"
+        />
+
+        <Input
+          title="Válido até"
+          value={expiredAt.toLocaleDateString('pt-BR')}
+          onChangeText={setExpiredAt}
+          onPress={() => setShowDatePicker(true)}
+          placeholder="dd/mm/yyyy"
           style={styles.input}
         />
-
-        <ThemedButton
-          title="Selecionar data de expiração"
-          type="secondary"
-          onPress={() => setShowDatePicker(true)}
-        />
-
-        <ThemedText type="caption" style={styles.dateText}>
-          Expira em: {expiredAt.toLocaleDateString('pt-BR')}
-        </ThemedText>
 
         {showDatePicker && (
           <DateTimePicker
@@ -115,7 +116,7 @@ export default function CreateVoucherScreen() {
       </ThemedView>
 
       <ThemedButton
-        title="Criar voucher"
+        title="Cadastrar voucher"
         type="primary"
         onPress={handleCreateVoucher}
         disabled={!code || !amount || !usageLimit}

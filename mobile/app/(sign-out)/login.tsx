@@ -8,6 +8,8 @@ import { GoogleUser } from '@/types/auth';
 import { findOrCreateUser } from '@/services/auth.service';
 import * as walletStorage from '@/storage/wallet.storage';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ThemedIconButton } from '@/components/ThemedIconButton';
+import { Radius } from 'lucide-react-native';
 
 export default function LoginScreen() {
   const { signIn, setAndStoreUser, isLoading } = useAuth();
@@ -53,20 +55,19 @@ export default function LoginScreen() {
         >
           <ThemedView style={styles.contentContainer}>
             <ThemedView style={styles.header}>
-              <Image source={iconImage} style={styles.icon} />
+              <ThemedIconButton
+                CustomIcon={() => <Radius style={styles.icon} size={44} />}
+              />
 
               <ThemedText type="title" style={styles.title}>
                 escooter
-              </ThemedText>
-
-              <ThemedText type="subtitle" style={styles.subtitle}>
-                Entre para começar a sua jornada
               </ThemedText>
             </ThemedView>
 
             <ThemedButton
               title="Entrar com Google"
               icon="logo-google"
+              iconColor="#FFFFFF"
               type="primary"
               onPress={handleGoogleSignIn}
               style={styles.button}
@@ -99,6 +100,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 44,
     height: 44,
+    color: '#FFFFFF',
   },
   contentContainer: {
     // flex: 1,
@@ -109,13 +111,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   title: {
-    // fontFamily: 'MuseoModerno',
+    fontFamily: 'MuseoModerno',
     fontSize: 48,
-    lineHeight: 48,
+    lineHeight: 56,
     marginBottom: 8,
     // marginTop: 30,
     textAlign: 'center',
     color: '#FFFFFF',
+    // backgroundColor: 'red',
   },
   subtitle: {
     fontSize: 16,
@@ -125,5 +128,6 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '100%',
+    backgroundColor: '#1294E2',
   },
 });

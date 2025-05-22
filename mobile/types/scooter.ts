@@ -20,6 +20,10 @@ export interface CreateScooter {
 
 export interface Scooter extends CreateScooter {
   id: string;
+  userId?: string | null;
+  startTime?: Date | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface ScooterPosition extends Scooter {}

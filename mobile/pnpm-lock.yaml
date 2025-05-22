@@ -14,6 +14,9 @@ importers:
       '@fontsource/museomoderno':
         specifier: ^5.2.5
         version: 5.2.5
+      '@gorhom/bottom-sheet':
+        specifier: ^5.1.2
+        version: 5.1.2(@types/react@18.3.18)(react-native-gesture-handler@2.20.2(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native-reanimated@3.16.7(@babel/core@7.26.10)(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
       '@react-native-community/datetimepicker':
         specifier: 8.2.0
         version: 8.2.0(expo@52.0.39(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@expo/metro-runtime@4.0.1(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1)))(react-native-webview@13.12.5(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
@@ -85,7 +88,7 @@ importers:
         version: 14.0.2(expo@52.0.39(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@expo/metro-runtime@4.0.1(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1)))(react-native-webview@13.12.5(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))
       lucide-react-native:
         specifier: ^0.486.0
-        version: 0.486.0(react-native-svg@15.11.2(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
+        version: 0.486.0(react-native-svg@15.8.0(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -95,6 +98,9 @@ importers:
       react-native:
         specifier: 0.76.7
         version: 0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1)
+      react-native-animated-rolling-numbers:
+        specifier: ^2.0.0
+        version: 2.0.0(react-native-reanimated@3.16.7(@babel/core@7.26.10)(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
       react-native-gesture-handler:
         specifier: ~2.20.2
         version: 2.20.2(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
@@ -102,7 +108,7 @@ importers:
         specifier: 1.18.0
         version: 1.18.0(react-native-web@0.19.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
       react-native-reanimated:
-        specifier: ~3.16.1
+        specifier: ~3.16.7
         version: 3.16.7(@babel/core@7.26.10)(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
       react-native-safe-area-context:
         specifier: 4.12.0
@@ -110,12 +116,18 @@ importers:
       react-native-screens:
         specifier: ~4.4.0
         version: 4.4.0(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
+      react-native-svg:
+        specifier: 15.8.0
+        version: 15.8.0(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
       react-native-web:
         specifier: ~0.19.13
         version: 0.19.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-native-webview:
         specifier: 13.12.5
         version: 13.12.5(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
+      socket.io-client:
+        specifier: ^4.8.1
+        version: 4.8.1
     devDependencies:
       '@babel/core':
         specifier: ^7.25.2
@@ -958,6 +970,27 @@ packages:
   '@fontsource/museomoderno@5.2.5':
     resolution: {integrity: sha512-HIRBu9hCUeYdJy7kyeOK5FMxx9JagUS4kPUznYkZ9O3hYHL8+Ru0qkjp+StY7UGNbAKaOG+A1mpbFlhf7xN2jQ==}
 
+  '@gorhom/bottom-sheet@5.1.2':
+    resolution: {integrity: sha512-5np8oL2krqAsVKLRE4YmtkZkyZeFiitoki72bEpVhZb8SRTNuAEeSbP3noq5srKpcRsboCr7uI+xmMyrWUd9kw==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-native': '*'
+      react: '*'
+      react-native: '*'
+      react-native-gesture-handler: '>=2.16.1'
+      react-native-reanimated: '>=3.16.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-native':
+        optional: true
+
+  '@gorhom/portal@1.0.14':
+    resolution: {integrity: sha512-MXyL4xvCjmgaORr/rtryDNFy3kU4qUbKlwtQqqsygd0xX3mhKjOLn6mQK8wfu0RkoE0pBE0nAasRoHua+/QZ7A==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
@@ -1244,6 +1277,9 @@ packages:
 
   '@sinonjs/fake-timers@10.3.0':
     resolution: {integrity: sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==}
+
+  '@socket.io/component-emitter@3.1.2':
+    resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
 
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -1926,6 +1962,15 @@ packages:
       supports-color:
         optional: true
 
+  debug@4.3.7:
+    resolution: {integrity: sha512-Er2nc/H7RrMXZBFCEim6TCmMk02Z8vLC2Rbi1KEBggpo0fS6l0S1nnapwmIi3yW/+GOJap1Krg4w0Hg80oCqgQ==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+
   debug@4.4.0:
     resolution: {integrity: sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==}
     engines: {node: '>=6.0'}
@@ -2061,6 +2106,13 @@ packages:
 
   end-of-stream@1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
+
+  engine.io-client@6.6.3:
+    resolution: {integrity: sha512-T0iLjnyNWahNyv/lcjS2y4oE358tVS/SYQNxYXGAJ9/GLgH4VCvOQ/mhTjqU88mLZCQgiG8RIegFHYCdVC+j5w==}
+
+  engine.io-parser@5.2.3:
+    resolution: {integrity: sha512-HqD3yTBfnBxIrbnM1DoD6Pcq8NECnh8d4As1Qgh0z5Gg3jRRIqijury0CL3ghu/edArpUYiYqQiDUQBIs4np3Q==}
+    engines: {node: '>=10.0.0'}
 
   enhanced-resolve@5.18.1:
     resolution: {integrity: sha512-ZSW3ma5GkcQBIpwZTSRAI8N71Uuwgs93IezB7mf7R60tC8ZbJideoDNKjHn2O9KIlx6rkGTTEk1xUCK2E1Y2Yg==}
@@ -3707,6 +3759,13 @@ packages:
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
+  react-native-animated-rolling-numbers@2.0.0:
+    resolution: {integrity: sha512-mCimo2dQ6l9u6YbAdm1kB+VBgAl/5iTGIHhCvc3EHfhexY9dmsIR3gVMob/0y9yiznkdcWFpNLmGtmH3vK5giQ==}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-native: '>=0.70.0'
+      react-native-reanimated: '>=2.0.0'
+
   react-native-gesture-handler@2.20.2:
     resolution: {integrity: sha512-HqzFpFczV4qCnwKlvSAvpzEXisL+Z9fsR08YV5LfJDkzuArMhBu2sOoSPUF/K62PCoAb+ObGlTC83TKHfUd0vg==}
     peerDependencies:
@@ -3754,8 +3813,8 @@ packages:
       react: '*'
       react-native: '*'
 
-  react-native-svg@15.11.2:
-    resolution: {integrity: sha512-+YfF72IbWQUKzCIydlijV1fLuBsQNGMT6Da2kFlo1sh+LE3BIm/2Q7AR1zAAR6L0BFLi1WaQPLfFUC9bNZpOmw==}
+  react-native-svg@15.8.0:
+    resolution: {integrity: sha512-KHJzKpgOjwj1qeZzsBjxNdoIgv2zNCO9fVcoq2TEhTRsVV5DGTZ9JzUZwybd7q4giT/H3RdtqC3u44dWdO0Ffw==}
     peerDependencies:
       react: '*'
       react-native: '*'
@@ -4040,6 +4099,14 @@ packages:
   slugify@1.6.6:
     resolution: {integrity: sha512-h+z7HKHYXj6wJU+AnS/+IH8Uh9fdcX1Lrhg1/VMdf9PwoBQXFcXiAdsy2tSK0P6gKwJLXp02r90ahUCqHk9rrw==}
     engines: {node: '>=8.0.0'}
+
+  socket.io-client@4.8.1:
+    resolution: {integrity: sha512-hJVXfu3E28NmzGk8o1sHhN3om52tRvwYeidbj7xKy2eIIse5IoKX3USlS6Tqt3BHAtflLIkCQBkzVrEEfWUyYQ==}
+    engines: {node: '>=10.0.0'}
+
+  socket.io-parser@4.2.4:
+    resolution: {integrity: sha512-/GbIKmo8ioc+NIWIhwdecY0ge+qVBSMdgxGygevmdHj24bsfgtCmcUUcQ5ZzcylGFHsN3k4HB4Cgkl96KVnuew==}
+    engines: {node: '>=10.0.0'}
 
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
@@ -4547,6 +4614,18 @@ packages:
       utf-8-validate:
         optional: true
 
+  ws@8.17.1:
+    resolution: {integrity: sha512-6XQFvXTkbfUOZOKKILFG1PDK2NDQs4azKQl26T0YS5CxqWLgXajbPZ+h4gZekJyRqFU8pvnbAbbs/3TgRPy+GQ==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
   ws@8.18.1:
     resolution: {integrity: sha512-RKW2aJZMXeMxVpnZ6bck+RswznaxmzdULiBr6KY7XkTnW8uvt0iT9H5DkHUChXrc+uurzwa0rVI16n/Xzjdz1w==}
     engines: {node: '>=10.0.0'}
@@ -4585,6 +4664,10 @@ packages:
 
   xmlchars@2.2.0:
     resolution: {integrity: sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==}
+
+  xmlhttprequest-ssl@2.1.2:
+    resolution: {integrity: sha512-TEU+nJVUUnA4CYJFLvK5X9AOeH4KvDvhIfm0vV1GaQRtchnG0hgK5p8hw/xjv8cunWYCsiPCSDzObPyhEwq3KQ==}
+    engines: {node: '>=0.4.0'}
 
   y18n@5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
@@ -5818,6 +5901,23 @@ snapshots:
 
   '@fontsource/museomoderno@5.2.5': {}
 
+  '@gorhom/bottom-sheet@5.1.2(@types/react@18.3.18)(react-native-gesture-handler@2.20.2(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native-reanimated@3.16.7(@babel/core@7.26.10)(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@gorhom/portal': 1.0.14(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
+      invariant: 2.2.4
+      react: 18.3.1
+      react-native: 0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1)
+      react-native-gesture-handler: 2.20.2(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
+      react-native-reanimated: 3.16.7(@babel/core@7.26.10)(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
+    optionalDependencies:
+      '@types/react': 18.3.18
+
+  '@gorhom/portal@1.0.14(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      nanoid: 3.3.10
+      react: 18.3.1
+      react-native: 0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1)
+
   '@isaacs/cliui@8.0.2':
     dependencies:
       string-width: 5.1.2
@@ -6287,6 +6387,8 @@ snapshots:
   '@sinonjs/fake-timers@10.3.0':
     dependencies:
       '@sinonjs/commons': 3.0.1
+
+  '@socket.io/component-emitter@3.1.2': {}
 
   '@tootallnate/once@2.0.0': {}
 
@@ -7069,6 +7171,10 @@ snapshots:
     dependencies:
       ms: 2.1.3
 
+  debug@4.3.7:
+    dependencies:
+      ms: 2.1.3
+
   debug@4.4.0:
     dependencies:
       ms: 2.1.3
@@ -7174,6 +7280,20 @@ snapshots:
   end-of-stream@1.4.4:
     dependencies:
       once: 1.4.0
+
+  engine.io-client@6.6.3:
+    dependencies:
+      '@socket.io/component-emitter': 3.1.2
+      debug: 4.3.7
+      engine.io-parser: 5.2.3
+      ws: 8.17.1
+      xmlhttprequest-ssl: 2.1.2
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  engine.io-parser@5.2.3: {}
 
   enhanced-resolve@5.18.1:
     dependencies:
@@ -8559,11 +8679,11 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucide-react-native@0.486.0(react-native-svg@15.11.2(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1):
+  lucide-react-native@0.486.0(react-native-svg@15.8.0(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-native: 0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1)
-      react-native-svg: 15.11.2(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
+      react-native-svg: 15.8.0(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
 
   make-dir@2.1.0:
     dependencies:
@@ -9169,6 +9289,12 @@ snapshots:
 
   react-is@18.3.1: {}
 
+  react-native-animated-rolling-numbers@2.0.0(react-native-reanimated@3.16.7(@babel/core@7.26.10)(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-native: 0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1)
+      react-native-reanimated: 3.16.7(@babel/core@7.26.10)(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1)
+
   react-native-gesture-handler@2.20.2(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1):
     dependencies:
       '@egjs/hammerjs': 2.0.17
@@ -9229,7 +9355,7 @@ snapshots:
       react-native: 0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1)
       warn-once: 0.1.1
 
-  react-native-svg@15.11.2(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1):
+  react-native-svg@15.8.0(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.9(@babel/core@7.26.10))(@types/react@18.3.18)(react@18.3.1))(react@18.3.1):
     dependencies:
       css-select: 5.1.0
       css-tree: 1.1.3
@@ -9569,6 +9695,24 @@ snapshots:
   slash@5.1.0: {}
 
   slugify@1.6.6: {}
+
+  socket.io-client@4.8.1:
+    dependencies:
+      '@socket.io/component-emitter': 3.1.2
+      debug: 4.3.7
+      engine.io-client: 6.6.3
+      socket.io-parser: 4.2.4
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  socket.io-parser@4.2.4:
+    dependencies:
+      '@socket.io/component-emitter': 3.1.2
+      debug: 4.3.7
+    transitivePeerDependencies:
+      - supports-color
 
   source-map-js@1.2.1: {}
 
@@ -10023,6 +10167,8 @@ snapshots:
 
   ws@7.5.10: {}
 
+  ws@8.17.1: {}
+
   ws@8.18.1: {}
 
   xcode@3.0.1:
@@ -10044,6 +10190,8 @@ snapshots:
   xmlbuilder@15.1.1: {}
 
   xmlchars@2.2.0: {}
+
+  xmlhttprequest-ssl@2.1.2: {}
 
   y18n@5.0.8: {}
 

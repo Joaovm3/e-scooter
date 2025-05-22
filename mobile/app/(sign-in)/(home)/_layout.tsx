@@ -27,6 +27,7 @@ import { ThemedButton } from '@/components/ThemedButton';
 import { getWallet } from '@/services/wallet.service';
 import { useWallet } from '@/contexts/WalletContext';
 import { useFocusEffect } from '@react-navigation/native';
+import { Radius } from 'lucide-react-native';
 
 export default function HomeLayout() {
   const { user, isLoading } = useAuth();
@@ -112,6 +113,8 @@ export default function HomeLayout() {
     return (
       <ThemedButton
         title={title}
+        iconColor={isBalancePositive ? '#18181B' : '#FF0000'}
+        // CustomIcon={() => <Radius color="#000" size={24} />}
         icon="wallet"
         type="action"
         onPress={() =>
@@ -153,5 +156,10 @@ const styles = StyleSheet.create({
     borderRadius: '50%',
     backgroundColor: 'rgba(255, 255, 255, 0.7)',
   },
-  walletButton: {},
+  walletButton: {
+    // backgroundColor: 'red',
+    // color: 'blue',
+    borderRadius: '20%',
+    backgroundColor: 'rgba(255, 255, 255, 1)',
+  },
 });

@@ -1,54 +1,40 @@
-import {
-  TouchableOpacity,
-  type TouchableOpacityProps,
-  StyleSheet,
-} from 'react-native';
+import { Pressable, type PressableProps, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useThemeColor } from '@/hooks/useThemeColor';
-import { useColorScheme } from 'react-native';
 
-export type ThemedIconButtonProps = TouchableOpacityProps & {
+interface ThemedIconButtonProps extends PressableProps {
+  icon?: string;
+  CustomIcon?: () => JSX.Element;
   lightColor?: string;
   darkColor?: string;
-  icon: keyof typeof Ionicons.glyphMap;
   type?: 'default' | 'action' | 'primary' | 'secondary';
   size?: number;
   iconColor?: string;
-};
+}
 
 export function ThemedIconButton({
+  icon,
+  CustomIcon,
+  size = 24,
+  onPress,
   style,
   lightColor,
   darkColor,
-  icon,
   type = 'default',
-  size = 24,
   iconColor,
-  ...rest
+  ...props
 }: ThemedIconButtonProps) {
-  const colorScheme = useColorScheme();
-  const backgroundColor = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    'background',
-  );
-
-  const defaultIconColor = useThemeColor(
-    {
-      light: type === 'default' ? '#000' : '#fff',
-      dark: type === 'default' ? '#fff' : '#000',
-    },
-    'text',
-  );
-
-  const color = iconColor || defaultIconColor;
-
   return (
-    <TouchableOpacity
-      style={[{ backgroundColor }, styles.button, styles[type], style]}
-      {...rest}
+    <Pressable
+      onPress={onPress}
+      style={[styles.button, styles[type], style]}
+      {...props}
     >
-      <Ionicons name={icon} size={size} color={color} />
-    </TouchableOpacity>
+      {CustomIcon ? (
+        <CustomIcon />
+      ) : (
+        <Ionicons name={icon as any} size={size} color={iconColor} />
+      )}
+    </Pressable>
   );
 }
 
@@ -67,7 +53,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   primary: {
-    backgroundColor: '#0a7ea4',
+    backgroundColor: '#1294E2',
     borderRadius: 12,
   },
   secondary: {

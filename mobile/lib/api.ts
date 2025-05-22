@@ -10,7 +10,7 @@ const api = axios.create({
 
 api.interceptors.request.use(async (config) => {
   const user = await getUser();
-  console.log('interceptr', { user });
+  // console.log('interceptr', { user });
   const token = user?.token || '';
   if (token) {
     // const { token } = JSON.parse(user);
@@ -22,6 +22,8 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
+    console.log('interceptor', error);
+
     if (error.response) {
       const { status, data } = error.response;
 

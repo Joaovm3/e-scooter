@@ -16,35 +16,22 @@ export const getWallet = async (id: string) => {
   }
 };
 
-export const addBalance = async (walletId: string, params: WalletParams) => {
+export const updateBalance = async (walletId: string, params: WalletParams) => {
   try {
-    const endpoint = `${PATH}/${walletId}/add-balance`;
+    const endpoint = `${PATH}/${walletId}/update-balance`;
     const response = await api.post<Wallet>(endpoint, {
       amount: params.amount,
     });
     return response.data;
   } catch (error: any) {
-    console.error('Error fetching add balance:', error?.message);
+    console.error('Error fetching update balance:', error?.message);
     throw error;
   }
 };
 
-export const updateWalletBalance = async (params: WalletParams) => {
+export const withdraw = async (walletId: string, params: WalletParams) => {
   try {
-    const endpoint = `${PATH}/${params.walletId}`;
-    const response = await api.patch<Wallet>(endpoint, {
-      balance: params.amount,
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error updating wallet balance:', error);
-    throw error;
-  }
-};
-
-export const withdraw = async (params: WalletParams) => {
-  try {
-    const endpoint = `${PATH}/${params.walletId}/withdraw`;
+    const endpoint = `${PATH}/${walletId}/withdraw`;
     const response = await api.post<Wallet>(endpoint, {
       amount: params.amount,
     });

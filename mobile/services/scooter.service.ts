@@ -22,3 +22,27 @@ export const getScooters = async (params?: Scooter) => {
     throw error;
   }
 };
+
+export const unlockScooter = async (scooterId: string, userId: string) => {
+  try {
+    const response = await api.post<Scooter>(`${PATH}/${scooterId}/unlock`, {
+      userId,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error unlocking scooter:', error);
+    throw error;
+  }
+};
+
+export const finishRide = async (scooterId: string, userId: string) => {
+  try {
+    const response = await api.post<Scooter>(`${PATH}/${scooterId}/finish`, {
+      userId,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error finishing ride:', error);
+    throw error;
+  }
+};
