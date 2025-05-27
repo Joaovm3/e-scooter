@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define RELAY_PIN 25
+#define RELAY_PIN 2
 
 // Schedules a function to be called after the delay in seconds 
 // void scheduleCallback(void *callback, uint32_t delay);
