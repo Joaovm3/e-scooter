@@ -6,6 +6,7 @@ import {
   Image,
   StyleProp,
   ViewStyle,
+  Platform,
 } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { ThemedText } from './ThemedText';
@@ -66,14 +67,18 @@ export function ScooterMarker({
 
 const styles = StyleSheet.create({
   icon: {
-    width: 40,
-    height: 40,
-    borderWidth: 3,
+    width: 'auto',
+    height: 'auto',
+    flex: 1,
     borderRadius: 100,
-    padding: 4,
+    padding: 3,
+    borderWidth: 3,
   },
   marker: {
-    padding: 3,
+    width: 40,
+    height: 40,
+    // margin: 3,
+    padding: 2,
     borderRadius: 100,
     overflow: 'hidden',
     backgroundColor: 'white',

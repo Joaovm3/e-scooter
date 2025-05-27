@@ -5,6 +5,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedButton } from '@/components/ThemedButton';
 import { Image } from 'react-native';
 import { router } from 'expo-router';
+import { MapPinPlusIcon } from 'lucide-react-native';
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
@@ -32,6 +33,21 @@ export default function ProfileScreen() {
 
       {/* Menu Items */}
       <ThemedView style={styles.menuContainer}>
+        <ThemedButton
+          title="Cadastrar patinetes"
+          icon="person-outline"
+          CustomIcon={() => <MapPinPlusIcon color="#000" size={24} />}
+          type="default"
+          onPress={() => {
+            router.navigate({
+              pathname: '/add-scooter',
+              params: {
+                headerTitle: 'Cadastrar patinetes',
+              },
+            });
+          }}
+          style={styles.menuItem}
+        />
         <ThemedButton
           title="Meus dados"
           icon="person-outline"
@@ -87,20 +103,6 @@ export default function ProfileScreen() {
           }}
           style={styles.menuItem}
         />
-        <ThemedButton
-          title="Cadastrar patinetes"
-          icon="settings"
-          type="default"
-          onPress={() => {
-            router.navigate({
-              pathname: '/add-scooter',
-              params: {
-                headerTitle: 'Cadastrar patinetes',
-              },
-            });
-          }}
-          style={styles.menuItem}
-        />
       </ThemedView>
 
       <ThemedButton
@@ -147,7 +149,7 @@ const styles = StyleSheet.create({
   menuContainer: {
     gap: 8,
     marginBottom: 32,
-    backgroundColor: '#f2f2f2',
+    // backgroundColor: '#f2f2f2',
   },
   menuItem: {
     width: '100%',

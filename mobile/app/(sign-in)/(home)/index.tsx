@@ -73,22 +73,26 @@ export default function HomeScreen() {
       try {
         await socketService.joinScooterRoom(activeRide.id);
         socketService.subscribeToScooterPosition((updatedScooter) => {
-          const allowedPermisions = [ScooterStatus.IN_USE];
-          const shouldFinishRide =
-            updatedScooter?.status &&
-            !allowedPermisions.includes(updatedScooter?.status);
+          // const allowedPermisions = [ScooterStatus.IN_USE];
+          // const shouldFinishRide =
+          //   updatedScooter?.status &&
+          //   !allowedPermisions.includes(updatedScooter?.status);
 
-          if (shouldFinishRide) {
-            handleFinishRide(updatedScooter);
-            return;
-          }
+          // if (shouldFinishRide) {
+          //   handleFinishRide(updatedScooter);
+          //   return;
+          // }
 
           if (updatedScooter.id === activeRide.id) {
             console.log('[Scooter] Position updated:', updatedScooter);
             const mergedData = { ...activeRide, ...updatedScooter };
             setScooters([mergedData]);
             setActiveRide(mergedData);
+            return;
           }
+
+          handleFinishRide(updatedScooter);
+          return;
         });
       } catch (error) {
         console.error('Error setting up scooter tracking:', error);
@@ -199,14 +203,14 @@ export default function HomeScreen() {
 
   const handleFinishRide = async (scooter: Scooter) => {
     try {
-      console.log('veio aqui');
       await scooterService.finishRide(scooter.id, user?.id || '');
+    } catch (error) {
+      console.error('Error finishing ride:', error);
+    } finally {
       await fetchScooters();
       await updateBalance();
       await setInitialRideBalance(0);
       setActiveRide(null);
-    } catch (error) {
-      console.error('Error finishing ride:', error);
     }
   };
 

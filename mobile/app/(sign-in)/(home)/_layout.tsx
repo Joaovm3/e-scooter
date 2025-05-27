@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   walletButton: {
     // backgroundColor: 'red',
     // color: 'blue',
-    borderRadius: '20%',
+    borderRadius: 100,
     backgroundColor: 'rgba(255, 255, 255, 1)',
   },
 });

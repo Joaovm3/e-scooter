@@ -188,18 +188,25 @@ export class ScooterService {
     return this.scooterRepository.save(scooter);
   }
 
-  async emitScooterPosition(scooter: TrackingScooter) {
-    try {
-      this.scooterTrackingGateway.emitToScooter(
-        scooter.id,
-        'scooter-position',
-        scooter,
+  async updateScooterData(scooter: TrackingScooter) {
+    const existingScooter = await this.findOne(scooter.id);
+    if (!existingScooter) {
+      throw new NotFoundException(
+        `Scooter com o ID ${scooter.id} não encontrada`,
       );
+    }
 
-      await this.updatePosition(
-        scooter.id,
-        scooter.geolocation,
-        scooter.batteryLevel,
+    Object.assign(existingScooter, scooter);
+    return this.scooterRepository.save(existingScooter);
+  }
+
+  async emitScooterPosition(receivedScooter: TrackingScooter) {
+    try {
+      const updatedScooter = await this.updateScooterData(receivedScooter);
+
+      this.scooterTrackingGateway.emitToScooter(
+        'scooter-position',
+        updatedScooter,
       );
     } catch (error: unknown) {
       console.error('Error emitting scooter position:', error);

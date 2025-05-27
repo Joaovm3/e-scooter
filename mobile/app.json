@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "config": {
-        "googleMapsApiKey": "process.env.EXPO_PUBLIC_GOOGLE_API_KEY"
+        "googleMapsApiKey": "AIzaSyDs7CqQogaGgZC76qxL4VuN66nYsSRiPWM"
       },
       "supportsTablet": true,
       "bundleIdentifier": "com.joaovm.escooter",
@@ -33,7 +33,7 @@
     "android": {
       "config": {
         "googleMaps": {
-          "apiKey": "process.env.EXPO_PUBLIC_GOOGLE_API_KEY"
+          "apiKey": "AIzaSyDs7CqQogaGgZC76qxL4VuN66nYsSRiPWM"
         }
       },
       "adaptiveIcon": {

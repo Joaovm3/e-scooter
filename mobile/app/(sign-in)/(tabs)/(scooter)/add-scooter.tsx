@@ -94,7 +94,7 @@ export default function AddScooterScreen() {
     <ScrollView style={styles.container}>
       <ThemedView style={styles.header}>
         <ThemedText type="subtitle" style={styles.subtitle}>
-          Preencha os dados do novo patinete
+          Preencha os dados abaixo
         </ThemedText>
       </ThemedView>
 

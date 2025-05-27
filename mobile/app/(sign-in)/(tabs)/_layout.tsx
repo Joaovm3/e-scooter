@@ -45,7 +45,7 @@ export default function TabLayout(test: any) {
       <Pressable onPress={() => router.back()} style={styles.previousButton}>
         <IconSymbol
           name="chevron.left"
-          size={24}
+          size={Platform.OS === 'ios' ? 24 : 40}
           color={Colors[colorScheme ?? 'light'].text}
         />
       </Pressable>
@@ -60,9 +60,7 @@ export default function TabLayout(test: any) {
         screenOptions={({ route }) => ({
           headerTitle: title,
           headerTitleStyle: { fontSize: 20 },
-          // headerStyle: {
-          //   backgroundColor: 'red',
-          // },
+          headerTitleAlign: 'center',
           headerTransparent: fullScreenPage,
           headerShadowVisible: false,
           headerLeft: !fullScreenPage ? PreviousRouter : undefined,
@@ -83,6 +81,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   previousButton: {
+    // fontSize: 20,
     // marginRight: 30,
     // margin: 0,
     // marginLeft: 10,
@@ -91,7 +90,6 @@ const styles = StyleSheet.create({
     // borderRadius: 18,
     // alignItems: 'center',
     // justifyContent: 'center',
-    // backgroundColor: 'rgba(255, 255, 255, 0.1)',
     // backgroundColor: 'red',
   },
 });

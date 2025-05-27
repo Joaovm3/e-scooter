@@ -8,6 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { Injectable } from '@nestjs/common';
+import { Scooter } from '../entities/scooter.entity';
 
 @Injectable()
 @WebSocketGateway(3002, {
@@ -53,7 +54,8 @@ export class ScooterTrackingGateway
     }
   }
 
-  emitToScooter(scooterId: string, event: string, data: any) {
+  emitToScooter(event: string, data: Scooter) {
+    const scooterId = data.id;
     console.log('emitiu', `scooter-${scooterId}`, event, data);
     this.server.to(`scooter-${scooterId}`).emit(event, data);
   }
