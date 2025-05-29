@@ -55,26 +55,26 @@ bool getGpsLocation(double *latitude, double *longitude) {
 
 void setupRelayPin(void) {
   pinMode(RELAY_PIN, OUTPUT);
-  digitalWrite(RELAY_PIN, LOW);
+  digitalWrite(RELAY_PIN, HIGH);
 }
 
 void turnOnRelay(void) {
-  digitalWrite(RELAY_PIN, HIGH);
-  delay(2000);
   digitalWrite(RELAY_PIN, LOW);
+  delay(2000);
+  digitalWrite(RELAY_PIN, HIGH);
   delay(1000);
   
-  digitalWrite(RELAY_PIN, HIGH);
-  delay(200);
   digitalWrite(RELAY_PIN, LOW);
   delay(200);
   digitalWrite(RELAY_PIN, HIGH);
   delay(200);
   digitalWrite(RELAY_PIN, LOW);
+  delay(200);
+  digitalWrite(RELAY_PIN, HIGH);
 }
 
 void turnOffRelay(void) {
-  digitalWrite(RELAY_PIN, HIGH);
-  delay(2000);
   digitalWrite(RELAY_PIN, LOW);
+  delay(2000);
+  digitalWrite(RELAY_PIN, HIGH);
 }
