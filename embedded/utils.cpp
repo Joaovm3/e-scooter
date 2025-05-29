@@ -29,6 +29,8 @@ TinyGPSPlus gps;
 
 void setupGps(void) {
   GPS_Serial.begin(9600, SERIAL_8N1, 34, 12);
+  while(!GPS_Serial);
+  delay(2000);
 }
 
 bool getGpsLocation(double *latitude, double *longitude) {
@@ -58,8 +60,21 @@ void setupRelayPin(void) {
 
 void turnOnRelay(void) {
   digitalWrite(RELAY_PIN, HIGH);
+  delay(2000);
+  digitalWrite(RELAY_PIN, LOW);
+  delay(1000);
+  
+  digitalWrite(RELAY_PIN, HIGH);
+  delay(200);
+  digitalWrite(RELAY_PIN, LOW);
+  delay(200);
+  digitalWrite(RELAY_PIN, HIGH);
+  delay(200);
+  digitalWrite(RELAY_PIN, LOW);
 }
 
 void turnOffRelay(void) {
+  digitalWrite(RELAY_PIN, HIGH);
+  delay(2000);
   digitalWrite(RELAY_PIN, LOW);
 }
