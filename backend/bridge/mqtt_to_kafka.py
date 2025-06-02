@@ -3,9 +3,7 @@ import json
 import paho.mqtt.client as mqtt
 from kafka import KafkaProducer
 
-def DEBUG_log(prefix, msg):
-    with open('log.txt', 'a') as f: 
-        f.write(f'{prefix}: {msg}\n')
+from utils import DEBUG_log
 
 # TODO: Get these by env vars trough docker config
 MQTT_BROKER = 'mosquitto'
@@ -23,6 +21,7 @@ def bridge():
     producer = KafkaProducer(
         bootstrap_servers=[KAFKA_BROKER],
         value_serializer=lambda v: json.dumps(v).encode()
+        # group_id='e-scooter-group' # ???
     )
 
     def on_connect(client, userdata, flags, rc):
@@ -35,6 +34,8 @@ def bridge():
         try:
             raw_data = base64.b64decode(payload['data'])
             data = json.loads(raw_data.decode('utf-8'))
+
+            DEBUG_log('INFO', f'mqtt_to_kafka -> {data}')
 
             producer.send(KAFKA_TOPIC, data)
             producer.flush()
