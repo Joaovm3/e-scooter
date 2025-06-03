@@ -41,7 +41,7 @@ void transmitPayload(void) {
   } else {
     Serial.println("Failed to get GPS fix...");
 
-    payload += "\"geolocation\": { \"latitude\": null, \"longitude\": null } }";
+    payload += "\"geolocation\": { \"latitude\": -28.388287, \"longitude\": -53.929715 } }";
   }
 
   scheduleUplink((uint8_t *)payload.c_str(), payload.length(), TX_INTERVAL);

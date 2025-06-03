@@ -71,12 +71,12 @@ void setup() {
 
     // Serial.println(F("Starting..."));
 
+    setupGps();
+    setupRelayPin();
+
     // Inicialização LMIC
     os_init();
     LMIC_reset();
-
-    setupGps();
-    setupRelayPin();
 
     // Tolerância para clock impreciso
     // LMIC_setClockError(MAX_CLOCK_ERROR * 5 / 100);

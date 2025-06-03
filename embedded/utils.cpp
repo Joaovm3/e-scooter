@@ -29,7 +29,7 @@ HardwareSerial GPS_Serial(1); // Use Serial1 for GPS
 
 void setupGps(void) {
   Serial.println("Starting GPS...");
-  GPS_Serial.begin(9600, SERIAL_8N1, 12, 15); // 34, 12);
+  GPS_Serial.begin(9600, SERIAL_8N1, 34, 12); // 34, 12);
   while(!GPS_Serial);
   delay(2000);
 }
