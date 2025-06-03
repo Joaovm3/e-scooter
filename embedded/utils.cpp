@@ -1,13 +1,13 @@
 #include <lmic.h>
-#include <TinyGPSPlus.h>
-#include <HardwareSerial.h>
+#include <TinyGPS++.h>
+// #include <HardwareSerial.h>
 
 #include "utils.hpp"
 
-// TODO: ... Arduino devs are so shit...
 static osjob_t sendJob;
 static uint8_t *jobArgData;
 static size_t jobArgSize;
+
 static void doSendJob(osjob_t *job) {
   if (!(LMIC.opmode & OP_TXRXPEND)) {
       // Envio confirmado (último argumento = 1)
@@ -24,11 +24,12 @@ void scheduleUplink(uint8_t *data, size_t size, uint32_t delay) {
   os_setTimedCallback(&sendJob, os_getTime() + sec2osticks(delay), doSendJob);
 }
 
-HardwareSerial GPS_Serial(1); // User Serial1 for GPS
 TinyGPSPlus gps;
+HardwareSerial GPS_Serial(1); // Use Serial1 for GPS
 
 void setupGps(void) {
-  GPS_Serial.begin(9600, SERIAL_8N1, 34, 12);
+  Serial.println("Starting GPS...");
+  GPS_Serial.begin(9600, SERIAL_8N1, 12, 15); // 34, 12);
   while(!GPS_Serial);
   delay(2000);
 }
@@ -38,7 +39,7 @@ bool getGpsLocation(double *latitude, double *longitude) {
   const unsigned long timeout = 5000; // Timeout after 5 seconds
 
   while (millis() - start < timeout) {
-    while (GPS_Serial.available() > 0) {
+    while (GPS_Serial.available()) {
       char c = GPS_Serial.read();
       gps.encode(c);
 
