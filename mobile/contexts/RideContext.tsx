@@ -44,7 +44,7 @@ const STORAGE_KEYS = {
 } as const;
 
 const RIDE_CONFIG: RideConfig = {
-  FACTOR_IN_SECONDS: 1,
+  FACTOR_IN_SECONDS: 60,
   SPENT_AMOUNT_PER_MINUTE: 1,
   TIME_IN_MINUTES: 1,
   UNIT_MEASURE: 'km',

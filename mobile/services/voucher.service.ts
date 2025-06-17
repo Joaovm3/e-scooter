@@ -7,6 +7,16 @@ export interface VoucherParams {
   code: string;
 }
 
+export const getAllVouchers = async () => {
+  try {
+    const response = await api.get<Voucher[]>(PATH);
+    return response.data;
+  } catch (error) {
+    console.error('Error get all vouchers:', error);
+    throw error;
+  }
+};
+
 export const createVoucher = async (voucher: CreateVoucher) => {
   try {
     const response = await api.post<Voucher>(PATH, voucher);

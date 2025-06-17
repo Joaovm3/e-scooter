@@ -1,20 +1,39 @@
-import { StyleSheet, ScrollView, Alert } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, Alert } from 'react-native';
+import { useState, useEffect } from 'react';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { Input } from '@/components/ui/Input';
 import { ThemedButton } from '@/components/ThemedButton';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'expo-router';
-import { useVoucher } from '@/services/voucher.service';
-import { AxiosError } from 'axios';
+import { useVoucher, getAllVouchers } from '@/services/voucher.service';
+import { VoucherList } from '@/components/VoucherList';
+import { Voucher } from '@/types/voucher';
 
 export default function VoucherScreen() {
   const { user } = useAuth();
-  const isAdmin = true; //user?.isAdmin;
+  const isAdmin = true; //user?.isAdmin || false;
   const router = useRouter();
 
   const [couponCode, setCouponCode] = useState('');
+  const [vouchers, setVouchers] = useState<Voucher[]>([]);
+
+  useEffect(() => {
+    if (isAdmin) {
+      loadVouchers();
+    }
+  }, [isAdmin]);
+
+  const loadVouchers = async () => {
+    try {
+      const voucherList = await getAllVouchers();
+      console.log({ voucherList });
+
+      setVouchers(voucherList);
+    } catch (error) {
+      console.error('Error loading vouchers:', error);
+    }
+  };
 
   const handleApplyVoucher = async () => {
     try {
@@ -31,44 +50,51 @@ export default function VoucherScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedView style={styles.header}>
-        <ThemedText type="subtitle" style={styles.subtitle}>
-          Insira seu código promocional
-        </ThemedText>
-      </ThemedView>
+      {isAdmin ? (
+        <>
+          <ThemedView style={styles.adminHeader}>
+            <ThemedText type="title">Vouchers Cadastrados</ThemedText>
+          </ThemedView>
+          <VoucherList vouchers={vouchers} />
+          <ThemedButton
+            icon="add"
+            type="secondary"
+            title="Criar novo voucher"
+            onPress={() =>
+              router.push({
+                pathname: '/create-voucher',
+                params: { headerTitle: 'Criar Voucher' },
+              })
+            }
+            style={styles.createButton}
+          />
+        </>
+      ) : (
+        <>
+          <ThemedView style={styles.header}>
+            <ThemedText type="subtitle" style={styles.subtitle}>
+              Insira seu código promocional
+            </ThemedText>
+          </ThemedView>
+          <ThemedView style={styles.inputContainer}>
+            <Input
+              value={couponCode}
+              onChangeText={setCouponCode}
+              placeholder="Digite seu código"
+              autoCapitalize="characters"
+              maxLength={15}
+              style={styles.input}
+            />
+          </ThemedView>
 
-      <ThemedView style={styles.inputContainer}>
-        <Input
-          value={couponCode}
-          onChangeText={setCouponCode}
-          placeholder="Digite seu código"
-          autoCapitalize="characters"
-          maxLength={15}
-          style={styles.input}
-        />
-      </ThemedView>
-
-      <ThemedButton
-        title="Aplicar voucher"
-        type="primary"
-        onPress={handleApplyVoucher}
-        style={styles.button}
-        disabled={!couponCode}
-      />
-
-      {isAdmin && (
-        <ThemedButton
-          icon="add"
-          type="secondary"
-          title="Criar novo voucher"
-          onPress={() =>
-            router.push({
-              pathname: '/create-voucher',
-              params: { headerTitle: 'Criar Voucher' },
-            })
-          }
-          style={styles.createButton}
-        />
+          <ThemedButton
+            title="Aplicar voucher"
+            type="primary"
+            onPress={handleApplyVoucher}
+            style={styles.button}
+            disabled={!couponCode}
+          />
+        </>
       )}
     </ThemedView>
   );
@@ -104,9 +130,18 @@ const styles = StyleSheet.create({
     bottom: 10,
     // left: 16,
   },
+  adminHeader: {
+    marginVertical: 16,
+    gap: 16,
+    // flexDirection: 'row',
+    // justifyContent: 'space-between',
+    // alignItems: 'center',
+    // padding: 16,
+    // borderBottomWidth: 1,
+    borderBottomColor: 'red',
+  },
   createButton: {
-    // position: 'absolute',
-    // top: 16,
-    // right: 16,
+    marginVertical: 16,
+    // marginLeft: 16,
   },
 });
