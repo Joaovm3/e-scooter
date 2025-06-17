@@ -3,14 +3,14 @@ import React, {
   useEffect,
   useCallback,
   useRef,
-  ForwardedRef,
+  useMemo,
 } from 'react';
 import { StyleSheet, View, Alert, Pressable, Image } from 'react-native';
 import * as Location from 'expo-location';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedButton } from '@/components/ThemedButton';
 import { ThemedIconButton } from '@/components/ThemedIconButton';
-import { router, useFocusEffect } from 'expo-router';
+import { router, useFocusEffect, useGlobalSearchParams } from 'expo-router';
 import { Platform } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { useAuth } from '@/contexts/AuthContext';
@@ -30,8 +30,13 @@ import MapView from 'react-native-maps';
 const ScooterIcon = require('../../../assets/images/scooter-icon.png');
 
 export default function HomeScreen() {
+  // 1. Get params and context
+  const { scooterId } = useGlobalSearchParams<{ scooterId: string }>();
   const { user } = useAuth();
   const { updateBalance } = useWallet();
+  const mapRef = useRef<MapView>(null);
+
+  // 2. Component state
   const [currentLocation, setCurrentLocation] = useState<Geolocation | null>(
     null,
   );
@@ -42,57 +47,89 @@ export default function HomeScreen() {
   const [activeRide, setActiveRide] = useState<Scooter | null>(null);
   const [showScooterList, setShowScooterList] = useState(false);
 
-  const mapRef = useRef<MapView>(null);
+  // 3. Memoized values
+  const markers = useMemo(
+    () => [
+      ...scooters.map((scooter) => ({
+        id: scooter.id,
+        coordinate: scooter.geolocation,
+        status: scooter.status,
+        batteryLevel: scooter.batteryLevel,
+        onPress: () => handleScooterPress(scooter),
+      })),
+      ...(!activeRide
+        ? [
+            {
+              id: 'user-location',
+              coordinate: currentLocation,
+              isUserLocation: true,
+            },
+          ]
+        : []),
+    ],
+    [scooters, activeRide, currentLocation],
+  );
+
+  // 4. Callbacks
+  const handleScooterPress = useCallback((scooter: Scooter) => {
+    setSelectedScooter(scooter);
+  }, []);
+
+  const centerMapOnLocation = useCallback((location: Geolocation) => {
+    if (!mapRef.current) return;
+    mapRef.current.animateToRegion(
+      {
+        latitude: location.latitude,
+        longitude: location.longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+      },
+      500,
+    );
+  }, []);
+
+  // 5. Effects
+  useEffect(() => {
+    loadInitialData();
+  }, []);
 
   useEffect(() => {
     if (!activeRide?.geolocation || !mapRef.current) return;
     centerMapOnLocation(activeRide.geolocation);
-  }, [activeRide?.geolocation]);
-
-  useEffect(() => {
-    loadInitialData();
-  }, []);
+  }, [activeRide?.geolocation, centerMapOnLocation]);
 
   useFocusEffect(
     useCallback(() => {
       const initialize = async () => {
         const scooters = await fetchScooters();
         checkActiveRide(scooters);
+        if (scooterId) {
+          checkQRCodeRedirect(scooters, scooterId);
+        }
       };
-
       initialize();
-    }, []),
+    }, [scooterId]),
   );
 
   useEffect(() => {
     if (!activeRide) return;
 
     setScooters([activeRide]);
+    // let isMounted = true; // Adicione flag para controlar montagem
 
     const setupSocket = async () => {
       try {
         await socketService.joinScooterRoom(activeRide.id);
         socketService.subscribeToScooterPosition((updatedScooter) => {
-          // const allowedPermisions = [ScooterStatus.IN_USE];
-          // const shouldFinishRide =
-          //   updatedScooter?.status &&
-          //   !allowedPermisions.includes(updatedScooter?.status);
-
-          // if (shouldFinishRide) {
-          //   handleFinishRide(updatedScooter);
-          //   return;
-          // }
+          // if (!isMounted) return; // Verifique se componente ainda está montado
 
           if (updatedScooter.id === activeRide.id) {
-            console.log('[Scooter] Position updated:', updatedScooter);
             const mergedData = { ...activeRide, ...updatedScooter };
             setScooters([mergedData]);
             setActiveRide(mergedData);
             return;
           }
-
           handleFinishRide(updatedScooter);
-          return;
         });
       } catch (error) {
         console.error('Error setting up scooter tracking:', error);
@@ -102,6 +139,7 @@ export default function HomeScreen() {
     setupSocket();
 
     return () => {
+      // isMounted = false; // Marca componente como desmontado
       socketService.unsubscribeFromScooterPosition();
       socketService.disconnect();
     };
@@ -131,6 +169,18 @@ export default function HomeScreen() {
     setScooters([activeScooter]);
   };
 
+  const checkQRCodeRedirect = (scooters: Scooter[], scooterId: string) => {
+    if (!scooterId) return;
+
+    const scooter = scooters.find((s) => s.id === scooterId);
+    console.log('chamou', { scooter });
+    if (scooter) {
+      setShowScooterList(false);
+      handleScooterPress(scooter);
+      centerMapOnLocation(scooter.geolocation);
+    }
+  };
+
   const loadInitialData = async () => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -157,26 +207,6 @@ export default function HomeScreen() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const centerMapOnLocation = (location: Geolocation) => {
-    if (!mapRef.current) return;
-
-    mapRef.current.animateToRegion(
-      {
-        latitude: location.latitude,
-        longitude: location.longitude,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      },
-      500, // animação em ms
-    );
-  };
-
-  const handleScooterPress = (scooter: Scooter) => {
-    setSelectedScooter(scooter);
-    // console.log({ scooter });
-    // checkActiveRide(scooters);
   };
 
   const handleRentPress = async (scooter: Scooter) => {
@@ -260,26 +290,6 @@ export default function HomeScreen() {
   if (!currentLocation || isLoading) {
     return null;
   }
-
-  const markers = [
-    ...scooters.map((scooter) => ({
-      id: scooter.id,
-      coordinate: scooter.geolocation,
-      status: scooter.status,
-      batteryLevel: scooter.batteryLevel,
-      onPress: () => handleScooterPress(scooter),
-    })),
-    // Only show user marker if no active ride
-    ...(!activeRide
-      ? [
-          {
-            id: 'user-location',
-            coordinate: currentLocation,
-            isUserLocation: true,
-          },
-        ]
-      : []),
-  ];
 
   return (
     <ThemedView style={styles.container}>

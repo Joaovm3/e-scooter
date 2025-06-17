@@ -73,21 +73,23 @@ export default function ScanScreen() {
     router.back();
   };
 
-  function handleQRCodeRead(data: BarcodeScanningResult) {
-    if (data && qrCodeLock.current) {
-      return;
-    }
+  async function handleQRCodeRead(data: BarcodeScanningResult) {
+    if (!data?.data || qrCodeLock.current) return;
+
+    qrCodeLock.current = true;
 
     try {
-      qrCodeLock.current = true;
-      // Handle QR code data
-      console.log('QR Code:', data);
-    } catch (error) {
-      console.error('Error reading QR code:', error);
+      const scooterId = data.data;
+      router.push({
+        pathname: '/(sign-in)/(home)',
+        params: { scooterId },
+      });
+    } catch (error: any) {
+      Alert.alert('Erro', error?.message || 'Erro ao ler QR Code');
     } finally {
       setTimeout(() => {
         qrCodeLock.current = false;
-      }, 2000);
+      }, 1000);
     }
   }
 
